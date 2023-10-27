@@ -7,5 +7,6 @@
         public int EmployeeId { get; set; }
         public DateTime OrderDate { get; set; }
         public float TotalAmount { get; set; }
+        public List<OrderItems> OrderItems { get; set; }
     }
 }

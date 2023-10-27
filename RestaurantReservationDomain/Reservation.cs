@@ -8,5 +8,6 @@
         public int TableId { get; set; }
         public DateTime ReservationDate { get; set; }
         public int PartySize { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

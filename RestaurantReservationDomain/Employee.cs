@@ -6,6 +6,7 @@
         public int RestaurantId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string position { get; set; }
+        public string Position { get; set; }
+        public List<Order> OrdersServed { get; set; }
     }
 }
