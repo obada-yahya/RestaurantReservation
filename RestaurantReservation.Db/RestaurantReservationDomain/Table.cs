@@ -1,6 +1,6 @@
 ﻿namespace RestaurantReservationDomain
 {
-    internal class Table
+    public class Table
     {
         public int Id { get; set; }
         public int RestaurantId { get; set; }
