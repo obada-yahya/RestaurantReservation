@@ -21,5 +21,14 @@ namespace RestaurantReservation.Db
                 .LogTo(Console.WriteLine, new[] {DbLoggerCategory.Database.Command.Name},LogLevel.Information)
                 .EnableSensitiveDataLogging();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Table>().HasOne<Restaurant>().WithMany().HasForeignKey(table => table.RestaurantId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Reservation>().HasOne<Restaurant>().WithMany().HasForeignKey(reservation => reservation.RestaurantId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<MenuItem>().HasOne<Restaurant>().WithMany().HasForeignKey(menuItem => menuItem.RestaurantId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Employee>().HasOne<Restaurant>().WithMany().HasForeignKey(employee => employee.RestaurantId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Order>().HasOne<Reservation>().WithMany().HasForeignKey(order => order.ReservationId).OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }
