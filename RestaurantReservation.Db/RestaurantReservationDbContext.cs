@@ -24,14 +24,7 @@ namespace RestaurantReservation.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Table>().HasOne<Restaurant>().WithMany().HasForeignKey(table => table.RestaurantId).OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<MenuItem>().HasOne<Restaurant>().WithMany().HasForeignKey(menuItem => menuItem.RestaurantId).OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Order>().Ignore(order => order.MenuItems);
-            modelBuilder.Entity<Reservation>().HasOne<Restaurant>().WithMany().HasForeignKey(reservation => reservation.RestaurantId).OnDelete(DeleteBehavior.NoAction);;
-            modelBuilder.Entity<OrderItem>().HasOne<Order>().WithMany().HasForeignKey(orderItem => orderItem.OrderId);
-            modelBuilder.Entity<OrderItem>().HasOne<MenuItem>().WithMany().HasForeignKey(orderItem => orderItem.ItemId);
-            modelBuilder.Entity<Reservation>().HasOne<Table>().WithMany().HasForeignKey(reservation => reservation.TableId);
-            modelBuilder.Entity<Employee>().HasOne<Restaurant>().WithMany().HasForeignKey(employee => employee.RestaurantId);
+            
         }
     }
 }
