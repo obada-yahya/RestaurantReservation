@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RestaurantReservationDomain;
+using RestaurantReservation.Db.RestaurantReservationDomain;
 
 namespace RestaurantReservation.Db
 {
@@ -10,7 +10,7 @@ namespace RestaurantReservation.Db
         public DbSet<Employee> Employees { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItems> OrderItems { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Table> Tables { get; set; }
@@ -24,11 +24,14 @@ namespace RestaurantReservation.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Table>().HasOne<Restaurant>().WithMany().HasForeignKey(table => table.RestaurantId).OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Reservation>().HasOne<Restaurant>().WithMany().HasForeignKey(reservation => reservation.RestaurantId).OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<MenuItem>().HasOne<Restaurant>().WithMany().HasForeignKey(menuItem => menuItem.RestaurantId).OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Employee>().HasOne<Restaurant>().WithMany().HasForeignKey(employee => employee.RestaurantId).OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Order>().HasOne<Reservation>().WithMany().HasForeignKey(order => order.ReservationId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Table>().HasOne<Restaurant>().WithMany().HasForeignKey(table => table.RestaurantId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<MenuItem>().HasOne<Restaurant>().WithMany().HasForeignKey(menuItem => menuItem.RestaurantId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Order>().Ignore(order => order.MenuItems);
+            modelBuilder.Entity<Reservation>().HasOne<Restaurant>().WithMany().HasForeignKey(reservation => reservation.RestaurantId).OnDelete(DeleteBehavior.NoAction);;
+            modelBuilder.Entity<OrderItem>().HasOne<Order>().WithMany().HasForeignKey(orderItem => orderItem.OrderId);
+            modelBuilder.Entity<OrderItem>().HasOne<MenuItem>().WithMany().HasForeignKey(orderItem => orderItem.ItemId);
+            modelBuilder.Entity<Reservation>().HasOne<Table>().WithMany().HasForeignKey(reservation => reservation.TableId);
+            modelBuilder.Entity<Employee>().HasOne<Restaurant>().WithMany().HasForeignKey(employee => employee.RestaurantId);
         }
     }
 }

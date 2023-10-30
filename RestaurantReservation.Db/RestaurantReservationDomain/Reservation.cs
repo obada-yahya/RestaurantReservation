@@ -1,17 +1,16 @@
-﻿namespace RestaurantReservationDomain
+﻿namespace RestaurantReservation.Db.RestaurantReservationDomain;
+
+public class Reservation
 {
-    public class Reservation
+    public Reservation()
     {
-        public Reservation()
-        {
-            Orders = new List<Order>();
-        }
-        public int Id { get; set; }
-        public int CustomerId { get; set; }
-        public int RestaurantId { get; set;}
-        public int TableId { get; set; }
-        public DateTime ReservationDate { get; set; }
-        public int PartySize { get; set; }
-        public List<Order> Orders { get; set; }
+        Orders = new List<Order>();
     }
+    public int Id { get; set; }
+    public int CustomerId { get; set; }
+    public int RestaurantId { get; set;}
+    public int TableId { get; set; }
+    public DateTime ReservationDate { get; set; }
+    public int PartySize { get; set; }
+    public List<Order> Orders { get; set; }
 }
