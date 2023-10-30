@@ -32,8 +32,6 @@ namespace RestaurantReservation.Db
             modelBuilder.Entity<OrderItem>().HasOne<MenuItem>().WithMany().HasForeignKey(orderItem => orderItem.ItemId);
             modelBuilder.Entity<Reservation>().HasOne<Table>().WithMany().HasForeignKey(reservation => reservation.TableId);
             modelBuilder.Entity<Employee>().HasOne<Restaurant>().WithMany().HasForeignKey(employee => employee.RestaurantId);
-            
-            
         }
     }
 }
