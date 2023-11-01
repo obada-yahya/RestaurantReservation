@@ -3,20 +3,20 @@ using RestaurantReservation.Db.RestaurantReservationDomain;
 
 namespace RestaurantReservation.Services;
 
-public class MenuItemService
+public class OrderItemsService
 {
     private readonly RestaurantReservationDbContext _context;
 
-    public MenuItemService(RestaurantReservationDbContext context)
+    public OrderItemsService(RestaurantReservationDbContext context)
     {
         _context = context;
     }
 
-    public void AddMenuItem(MenuItem menuItem)
+    public void AddOrderItem(OrderItems orderItems)
     {
         try
         {
-            _context.MenuItems.Add(menuItem);
+            _context.OrderItems.Add(orderItems);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -25,25 +25,26 @@ public class MenuItemService
         }
     }
 
-    public IEnumerable<MenuItem> GetMenuItems()
+    public IEnumerable<OrderItems> GetOrderItems()
     {
         try
         {
-            return _context.MenuItems;
+            return _context.OrderItems;
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<MenuItem>();
+        return new List<OrderItems>();
     }
     
-    public MenuItem? FindMenuItem(int id)
+    public OrderItems? FindOrderItems(int id)
     {
         try
         {
-            return _context.MenuItems
-                   .Single(order => order.Id == id);
+            return _context
+                .OrderItems
+                .Single(order => order.Id == id);
         }
         catch (Exception e)
         {
@@ -52,11 +53,11 @@ public class MenuItemService
         return null;
     }
     
-    public void UpdateMenuItem(MenuItem menuItem)
+    public void UpdateOrderItems(OrderItems orderItems)
     {
         try
         {
-            _context.MenuItems.Update(menuItem);
+            _context.OrderItems.Update(orderItems);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -65,11 +66,11 @@ public class MenuItemService
         }
     }
     
-    public void DeleteMenuItem(int id)
+    public void DeleteOrderItems(int id)
     {
         try
         {
-            _context.MenuItems.Remove(new MenuItem(){Id = id});
+            _context.OrderItems.Remove(new OrderItems(){Id = id});
             _context.SaveChanges();
         }
         catch (Exception e)

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Db;
-using RestaurantReservation.Db.Migrations;
+﻿using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 
 namespace RestaurantReservation.Services;
