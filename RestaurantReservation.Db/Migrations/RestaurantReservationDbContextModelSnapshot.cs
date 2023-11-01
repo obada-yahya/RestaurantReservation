@@ -122,6 +122,9 @@ namespace RestaurantReservation.Db.Migrations
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("EmployeeId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -135,12 +138,14 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("EmployeeId");
 
+                    b.HasIndex("EmployeeId1");
+
                     b.HasIndex("ReservationId");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItem", b =>
+            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItems", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -250,8 +255,13 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.Order", b =>
                 {
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
                         .WithMany("OrdersServed")
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("EmployeeId1");
 
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Reservation", null)
                         .WithMany("Orders")

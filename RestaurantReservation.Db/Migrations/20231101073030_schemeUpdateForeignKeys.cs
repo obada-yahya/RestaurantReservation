@@ -12,6 +12,10 @@ namespace RestaurantReservation.Db.Migrations
                 name: "FK_Orders_Employees_EmployeeId",
                 table: "Orders");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_Reservations_Tables_TableId",
+                table: "Reservations");
+            
             migrationBuilder.AlterColumn<int>(
                 name: "TableId",
                 table: "Reservations",
@@ -33,7 +37,16 @@ namespace RestaurantReservation.Db.Migrations
                 table: "Orders",
                 column: "EmployeeId",
                 principalTable: "Employees",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
+            
+            migrationBuilder.AddForeignKey(
+                name: "FK_Reservations_Tables_TableId",
+                table: "Reservations",
+                column: "TableId",
+                principalTable: "Tables",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -42,31 +55,39 @@ namespace RestaurantReservation.Db.Migrations
                 name: "FK_Orders_Employees_EmployeeId",
                 table: "Orders");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_Reservations_Tables_TableId",
+                table: "Reservations");
+
             migrationBuilder.AlterColumn<int>(
                 name: "TableId",
                 table: "Reservations",
                 type: "int",
                 nullable: false,
-                defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
+                oldType: "int");
 
             migrationBuilder.AlterColumn<int>(
                 name: "EmployeeId",
                 table: "Orders",
                 type: "int",
                 nullable: false,
-                defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
+                oldType: "int");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Orders_Employees_EmployeeId",
                 table: "Orders",
                 column: "EmployeeId",
                 principalTable: "Employees",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Reservations_Tables_TableId",
+                table: "Reservations",
+                column: "TableId",
+                principalTable: "Tables",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

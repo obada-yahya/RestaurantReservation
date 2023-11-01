@@ -1,6 +1,6 @@
 ﻿namespace RestaurantReservation.Db.RestaurantReservationDomain;
 
-public class OrderItem
+public class OrderItems
 {
     public int Id {  get; set; }
     public int OrderId { get; set; }
