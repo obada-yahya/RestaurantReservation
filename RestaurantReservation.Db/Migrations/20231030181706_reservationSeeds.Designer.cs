@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantReservation.Db;
 
@@ -11,9 +12,10 @@ using RestaurantReservation.Db;
 namespace RestaurantReservation.Db.Migrations
 {
     [DbContext(typeof(RestaurantReservationDbContext))]
-    partial class RestaurantReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030181706_reservationSeeds")]
+    partial class reservationSeeds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,10 +121,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EmployeeId1")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
@@ -138,14 +137,12 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("EmployeeId1");
-
                     b.HasIndex("ReservationId");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItems", b =>
+            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -187,7 +184,7 @@ namespace RestaurantReservation.Db.Migrations
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TableId")
+                    b.Property<int>("TableId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -195,6 +192,53 @@ namespace RestaurantReservation.Db.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            PartySize = 5,
+                            ReservationDate = new DateTime(2023, 10, 31, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            RestaurantId = 1,
+                            TableId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerId = 2,
+                            PartySize = 5,
+                            ReservationDate = new DateTime(2023, 10, 10, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            RestaurantId = 2,
+                            TableId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CustomerId = 3,
+                            PartySize = 5,
+                            ReservationDate = new DateTime(2023, 10, 20, 12, 30, 0, 0, DateTimeKind.Unspecified),
+                            RestaurantId = 3,
+                            TableId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CustomerId = 4,
+                            PartySize = 9,
+                            ReservationDate = new DateTime(2023, 10, 25, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            RestaurantId = 1,
+                            TableId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CustomerId = 5,
+                            PartySize = 8,
+                            ReservationDate = new DateTime(2023, 10, 28, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            RestaurantId = 2,
+                            TableId = 5
+                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.Restaurant", b =>
@@ -255,13 +299,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.Order", b =>
                 {
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
                         .WithMany("OrdersServed")
-                        .HasForeignKey("EmployeeId1");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Reservation", null)
                         .WithMany("Orders")

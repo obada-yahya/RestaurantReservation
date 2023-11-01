@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantReservation.Db;
 
@@ -11,9 +12,10 @@ using RestaurantReservation.Db;
 namespace RestaurantReservation.Db.Migrations
 {
     [DbContext(typeof(RestaurantReservationDbContext))]
-    partial class RestaurantReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231101073030_schemeUpdateForeignKeys")]
+    partial class schemeUpdateForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,9 +124,6 @@ namespace RestaurantReservation.Db.Migrations
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EmployeeId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -138,14 +137,12 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("EmployeeId1");
-
                     b.HasIndex("ReservationId");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItems", b =>
+            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -255,13 +252,8 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.Order", b =>
                 {
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
                         .WithMany("OrdersServed")
-                        .HasForeignKey("EmployeeId1");
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Reservation", null)
                         .WithMany("Orders")

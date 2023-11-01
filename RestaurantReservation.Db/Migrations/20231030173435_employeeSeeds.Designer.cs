@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantReservation.Db;
 
@@ -11,9 +12,10 @@ using RestaurantReservation.Db;
 namespace RestaurantReservation.Db.Migrations
 {
     [DbContext(typeof(RestaurantReservationDbContext))]
-    partial class RestaurantReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030173435_employeeSeeds")]
+    partial class employeeSeeds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,6 +79,88 @@ namespace RestaurantReservation.Db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "jack",
+                            LastName = "smith",
+                            Position = "Manager",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "sam",
+                            LastName = "steve",
+                            Position = "Server",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "john",
+                            LastName = "Michael",
+                            Position = "Manager",
+                            RestaurantId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Daniel",
+                            LastName = "William",
+                            Position = "Server",
+                            RestaurantId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "James",
+                            LastName = "john",
+                            Position = "Server",
+                            RestaurantId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FirstName = "Jeffrey",
+                            LastName = "Alexander",
+                            Position = "Barista",
+                            RestaurantId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            FirstName = "Gregory",
+                            LastName = "Jeremy",
+                            Position = "Barista",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            FirstName = "Eric",
+                            LastName = "Timothy",
+                            Position = "Manager",
+                            RestaurantId = 3
+                        },
+                        new
+                        {
+                            Id = 9,
+                            FirstName = "Kevin",
+                            LastName = "William",
+                            Position = "Barista",
+                            RestaurantId = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            FirstName = "Edward",
+                            LastName = "Brian",
+                            Position = "Barista",
+                            RestaurantId = 2
+                        });
                 });
 
             modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.MenuItem", b =>
@@ -119,10 +203,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EmployeeId1")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
@@ -138,14 +219,12 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("EmployeeId1");
-
                     b.HasIndex("ReservationId");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItems", b =>
+            modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -187,7 +266,7 @@ namespace RestaurantReservation.Db.Migrations
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TableId")
+                    b.Property<int>("TableId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -255,13 +334,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.RestaurantReservationDomain.Order", b =>
                 {
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Employee", null)
                         .WithMany("OrdersServed")
-                        .HasForeignKey("EmployeeId1");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.Reservation", null)
                         .WithMany("Orders")

@@ -11,6 +11,9 @@
     <Compile Remove="RestaurantReservation.Db\**" />
     <EmbeddedResource Remove="RestaurantReservation.Db\**" />
     <None Remove="RestaurantReservation.Db\**" />
+    <Compile Remove="RestaurantReservationDomain\**" />
+    <EmbeddedResource Remove="RestaurantReservationDomain\**" />
+    <None Remove="RestaurantReservationDomain\**" />
   </ItemGroup>
 
   <ItemGroup>
