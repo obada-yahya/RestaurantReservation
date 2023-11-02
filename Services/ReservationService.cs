@@ -72,6 +72,10 @@ public class ReservationService
         {
             return GetReservationWithDetails(_context.Reservations.Where(reservation => reservation.Id == id)).Single();
         }
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine("There's no reservation exists with the given ID.");
+        }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);

@@ -39,11 +39,13 @@ public class EmployeeService
         return new List<Employee>();
     }
     
-    public Restaurant? FindRestaurant(int id)
+    public Employee? FindEmployee(int id)
     {
         try
         {
-            return _context.Restaurants.Single(restaurant => restaurant.Id == id);
+            return _context.Employees
+                   .Include(employee => employee.OrdersServed)
+                   .Single(employee => employee.Id == id);
         }
         catch (Exception e)
         {
@@ -52,11 +54,11 @@ public class EmployeeService
         return null;
     }
     
-    public void UpdateRestaurant(Restaurant restaurant)
+    public void UpdateEmployee(Employee employee)
     {
         try
         {
-            _context.Restaurants.Update(restaurant);
+            _context.Employees.Update(employee);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -65,11 +67,11 @@ public class EmployeeService
         }
     }
     
-    public void DeleteRestaurant(int id)
+    public void DeleteEmployee(int id)
     {
         try
         {
-            _context.Restaurants.Remove(new Restaurant(){Id = id});
+            _context.Employees.Remove(new Employee(){Id = id});
             _context.SaveChanges();
         }
         catch (Exception e)
