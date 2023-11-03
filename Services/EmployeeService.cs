@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Services.Interfaces;
 
 namespace RestaurantReservation.Services;
 
-public class EmployeeService
+public class EmployeeService : IEmployeeService
 {
     private readonly RestaurantReservationDbContext _context;
 

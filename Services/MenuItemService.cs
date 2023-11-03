@@ -1,9 +1,10 @@
 ﻿using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Services.Interfaces;
 
 namespace RestaurantReservation.Services;
 
-public class MenuItemService
+public class MenuItemService : IMenuItemService
 {
     private readonly RestaurantReservationDbContext _context;
 

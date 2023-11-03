@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
@@ -30,7 +30,7 @@
 #*.dbproj    merge=binary
 #*.fsproj    merge=binary
 #*.lsproj    merge=binary
-#*.wixproj   merge=binary
+#*.wixproj   merge=bin  ary
 #*.modelproj merge=binary
 #*.sqlproj   merge=binary
 #*.wwaproj   merge=binary

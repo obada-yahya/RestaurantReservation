@@ -4,7 +4,7 @@ using RestaurantReservation.Db.RestaurantReservationDomain;
 
 namespace RestaurantReservation.Services;
 
-public class CustomerService
+public class CustomerService : ICustomerService
 {
     private readonly RestaurantReservationDbContext _context;
 
