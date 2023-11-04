@@ -149,7 +149,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ItemId")
+                    b.Property<int>("MenuItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
@@ -160,7 +160,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("MenuItemId");
 
                     b.HasIndex("OrderId");
 
@@ -362,7 +362,7 @@ namespace RestaurantReservation.Db.Migrations
                 {
                     b.HasOne("RestaurantReservation.Db.RestaurantReservationDomain.MenuItem", null)
                         .WithMany()
-                        .HasForeignKey("ItemId")
+                        .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

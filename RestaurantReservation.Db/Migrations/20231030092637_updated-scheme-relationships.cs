@@ -59,9 +59,9 @@ namespace RestaurantReservation.Db.Migrations
                 column: "TableId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ItemId",
+                name: "IX_OrderItems_MenuItemId",
                 table: "OrderItems",
-                column: "ItemId");
+                column: "MenuItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
@@ -76,9 +76,9 @@ namespace RestaurantReservation.Db.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_OrderItems_MenuItems_ItemId",
+                name: "FK_OrderItems_MenuItems_MenuItemId",
                 table: "OrderItems",
-                column: "ItemId",
+                column: "MenuItemId",
                 principalTable: "MenuItems",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -129,7 +129,7 @@ namespace RestaurantReservation.Db.Migrations
                 table: "MenuItems");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_OrderItems_MenuItems_ItemId",
+                name: "FK_OrderItems_MenuItems_MenuItemId",
                 table: "OrderItems");
 
             migrationBuilder.DropForeignKey(
@@ -157,7 +157,7 @@ namespace RestaurantReservation.Db.Migrations
                 table: "Reservations");
 
             migrationBuilder.DropIndex(
-                name: "IX_OrderItems_ItemId",
+                name: "IX_OrderItems_MenuItemId",
                 table: "OrderItems");
 
             migrationBuilder.DropIndex(

@@ -150,7 +150,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ItemId")
+                    b.Property<int>("MenuItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
