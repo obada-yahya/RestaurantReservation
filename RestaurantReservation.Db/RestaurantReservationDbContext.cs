@@ -15,9 +15,14 @@ namespace RestaurantReservation.Db
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Table> Tables { get; set; }
+        
+        [DbFunction("CalculateTotalRevenueOfRestaurant","dbo")]
+        public double CalculateTotalRevenueOfRestaurant(int restaurantId) 
+            => throw new NotImplementedException();
+        
         public DbSet<ReservationsFullDetails> ReservationsFullDetails { get; set; }
         public DbSet<EmployeesWithRestaurantDetails> EmployeesWithRestaurantDetails { get; set; }
-
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=DESKTOP-EKG9OL3\SQLEXPRESS;Database=RestaurantReservationCore;Trusted_Connection=True;")
