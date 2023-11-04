@@ -3,22 +3,22 @@ using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Services.Interfaces;
 
-namespace RestaurantReservation.Services;
+namespace RestaurantReservation.Services.EmployeeServices;
 
-public class OrderService: IOrderService
+public class EmployeeService : IEmployeeService
 {
     private readonly RestaurantReservationDbContext _context;
 
-    public OrderService(RestaurantReservationDbContext context)
+    public EmployeeService(RestaurantReservationDbContext context)
     {
         _context = context;
     }
 
-    public void AddOrder(Order order)
+    public void AddEmployee(Employee employee)
     {
         try
         {
-            _context.Orders.Add(order);
+            _context.Employees.Add(employee);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -27,28 +27,26 @@ public class OrderService: IOrderService
         }
     }
 
-    public IEnumerable<Order> GetOrders()
+    public IEnumerable<Employee> GetEmployees()
     {
         try
         {
-            return _context.Orders
-                   .Include(order => order.OrderItems);
+            return _context.Employees.Include(employee => employee.OrdersServed);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Order>();
+        return new List<Employee>();
     }
     
-    public Order? FindOrder(int id)
+    public Employee? FindEmployee(int id)
     {
         try
         {
-            return _context
-                .Orders
-                .Include(order => order.OrderItems)
-                .Single(order => order.Id == id);
+            return _context.Employees
+                   .Include(employee => employee.OrdersServed)
+                   .Single(employee => employee.Id == id);
         }
         catch (Exception e)
         {
@@ -57,11 +55,11 @@ public class OrderService: IOrderService
         return null;
     }
     
-    public void UpdateOrder(Order order)
+    public void UpdateEmployee(Employee employee)
     {
         try
         {
-            _context.Orders.Update(order);
+            _context.Employees.Update(employee);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -70,11 +68,11 @@ public class OrderService: IOrderService
         }
     }
     
-    public void DeleteOrder(int id)
+    public void DeleteEmployee(int id)
     {
         try
         {
-            _context.Orders.Remove(new Order(){Id = id});
+            _context.Employees.Remove(new Employee(){Id = id});
             _context.SaveChanges();
         }
         catch (Exception e)

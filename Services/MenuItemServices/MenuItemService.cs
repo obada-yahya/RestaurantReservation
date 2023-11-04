@@ -1,24 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Db;
+﻿using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Services.Interfaces;
 
-namespace RestaurantReservation.Services;
+namespace RestaurantReservation.Services.MenuItemServices;
 
-public class EmployeeService : IEmployeeService
+public class MenuItemService : IMenuItemService
 {
     private readonly RestaurantReservationDbContext _context;
 
-    public EmployeeService(RestaurantReservationDbContext context)
+    public MenuItemService(RestaurantReservationDbContext context)
     {
         _context = context;
     }
 
-    public void AddEmployee(Employee employee)
+    public void AddMenuItem(MenuItem menuItem)
     {
         try
         {
-            _context.Employees.Add(employee);
+            _context.MenuItems.Add(menuItem);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -27,26 +25,25 @@ public class EmployeeService : IEmployeeService
         }
     }
 
-    public IEnumerable<Employee> GetEmployees()
+    public IEnumerable<MenuItem> GetMenuItems()
     {
         try
         {
-            return _context.Employees.Include(employee => employee.OrdersServed);
+            return _context.MenuItems;
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Employee>();
+        return new List<MenuItem>();
     }
     
-    public Employee? FindEmployee(int id)
+    public MenuItem? FindMenuItem(int id)
     {
         try
         {
-            return _context.Employees
-                   .Include(employee => employee.OrdersServed)
-                   .Single(employee => employee.Id == id);
+            return _context.MenuItems
+                   .Single(order => order.Id == id);
         }
         catch (Exception e)
         {
@@ -55,11 +52,11 @@ public class EmployeeService : IEmployeeService
         return null;
     }
     
-    public void UpdateEmployee(Employee employee)
+    public void UpdateMenuItem(MenuItem menuItem)
     {
         try
         {
-            _context.Employees.Update(employee);
+            _context.MenuItems.Update(menuItem);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -68,11 +65,11 @@ public class EmployeeService : IEmployeeService
         }
     }
     
-    public void DeleteEmployee(int id)
+    public void DeleteMenuItem(int id)
     {
         try
         {
-            _context.Employees.Remove(new Employee(){Id = id});
+            _context.MenuItems.Remove(new MenuItem(){Id = id});
             _context.SaveChanges();
         }
         catch (Exception e)

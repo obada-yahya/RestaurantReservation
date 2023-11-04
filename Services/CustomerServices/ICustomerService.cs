@@ -1,6 +1,6 @@
 ﻿using RestaurantReservation.Db.RestaurantReservationDomain;
 
-namespace RestaurantReservation.Services;
+namespace RestaurantReservation.Services.CustomerServices;
 
 public interface ICustomerService
 {

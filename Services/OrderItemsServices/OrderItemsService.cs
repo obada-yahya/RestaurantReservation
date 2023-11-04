@@ -2,22 +2,22 @@
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Services.Interfaces;
 
-namespace RestaurantReservation.Services;
+namespace RestaurantReservation.Services.OrderItemsServices;
 
-public class RestaurantService: IRestaurantService
+public class OrderItemsService: IOrderItemsService
 {
     private readonly RestaurantReservationDbContext _context;
 
-    public RestaurantService(RestaurantReservationDbContext context)
+    public OrderItemsService(RestaurantReservationDbContext context)
     {
         _context = context;
     }
 
-    public void AddRestaurant(Restaurant restaurant)
+    public void AddOrderItem(OrderItems orderItems)
     {
         try
         {
-            _context.Restaurants.Add(restaurant);
+            _context.OrderItems.Add(orderItems);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -26,24 +26,26 @@ public class RestaurantService: IRestaurantService
         }
     }
 
-    public IEnumerable<Restaurant> GetRestaurants()
+    public IEnumerable<OrderItems> GetOrderItems()
     {
         try
         {
-            return _context.Restaurants;
+            return _context.OrderItems;
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Restaurant>();
+        return new List<OrderItems>();
     }
     
-    public Restaurant? FindRestaurant(int id)
+    public OrderItems? FindOrderItems(int id)
     {
         try
         {
-            return _context.Restaurants.Single(restaurant => restaurant.Id == id);
+            return _context
+                .OrderItems
+                .Single(order => order.Id == id);
         }
         catch (Exception e)
         {
@@ -52,11 +54,11 @@ public class RestaurantService: IRestaurantService
         return null;
     }
     
-    public void UpdateRestaurant(Restaurant restaurant)
+    public void UpdateOrderItems(OrderItems orderItems)
     {
         try
         {
-            _context.Restaurants.Update(restaurant);
+            _context.OrderItems.Update(orderItems);
             _context.SaveChanges();
         }
         catch (Exception e)
@@ -65,11 +67,11 @@ public class RestaurantService: IRestaurantService
         }
     }
     
-    public void DeleteRestaurant(int id)
+    public void DeleteOrderItems(int id)
     {
         try
         {
-            _context.Restaurants.Remove(new Restaurant(){Id = id});
+            _context.OrderItems.Remove(new OrderItems(){Id = id});
             _context.SaveChanges();
         }
         catch (Exception e)

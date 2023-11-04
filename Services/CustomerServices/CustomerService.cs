@@ -2,7 +2,7 @@
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 
-namespace RestaurantReservation.Services;
+namespace RestaurantReservation.Services.CustomerServices;
 
 public class CustomerService : ICustomerService
 {
