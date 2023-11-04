@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Services.Interfaces;
 
@@ -28,30 +29,9 @@ public class ReservationService: IReservationService
 
     private List<Reservation> GetReservationWithDetails(IQueryable<Reservation> reservations)
     {
-        return reservations
-            .Select(reservation => new Reservation
-            {
-                Id = reservation.Id,
-                CustomerId = reservation.CustomerId,
-                RestaurantId = reservation.RestaurantId,
-                TableId = reservation.TableId,
-                ReservationDate = reservation.ReservationDate,
-                PartySize = reservation.PartySize,
-                Orders = reservation.Orders.Select(order => new Order
-                {
-                    Id = order.Id,
-                    EmployeeId = order.EmployeeId,
-                    OrderDate = order.OrderDate,
-                    TotalAmount = order.TotalAmount,
-                    OrderItems = order.OrderItems.Select(orderItem => new OrderItems
-                    {
-                        Id = orderItem.Id,
-                        ItemId = orderItem.ItemId,
-                        Quantity = orderItem.Quantity,
-                        MenuItem = _context.MenuItems.FirstOrDefault(menuItem => menuItem.Id == orderItem.ItemId)
-                    }).ToList()
-                }).ToList()
-            }).ToList();
+        return reservations.Include(reservation => reservation.Orders)
+            .ThenInclude(order => order.OrderItems)
+            .ThenInclude(orderItems => orderItems.MenuItem).ToList();
     }
     
     public List<Reservation> GetReservations()

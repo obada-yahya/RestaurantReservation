@@ -10,7 +10,7 @@ namespace RestaurantReservation.Db.Migrations
         {
             migrationBuilder.InsertData(
                 table: "OrderItems",
-                columns: new[] { "Id","OrderId", "ItemId", "Quantity" },
+                columns: new[] { "Id","OrderId", "MenuItemId", "Quantity" },
                 values: new object[,]
                 {
                     {1, 1, 1, 2 },
