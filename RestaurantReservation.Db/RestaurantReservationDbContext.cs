@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RestaurantReservation.Db.KeylessEntities;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 
 namespace RestaurantReservation.Db
@@ -14,6 +15,8 @@ namespace RestaurantReservation.Db
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Table> Tables { get; set; }
+        public DbSet<ReservationsFullDetails> ReservationsFullDetails { get; set; }
+        public DbSet<EmployeesWithRestaurantDetails> EmployeesWithRestaurantDetails { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,7 +27,12 @@ namespace RestaurantReservation.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ReservationsFullDetails>().HasNoKey()
+                .ToView(nameof(ReservationsFullDetails));
             
+            modelBuilder.Entity<EmployeesWithRestaurantDetails>().HasNoKey()
+                .ToView(nameof(EmployeesWithRestaurantDetails));
+
         }
     }
 }
