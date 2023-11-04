@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RestaurantReservation.Db.KeylessEntities;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 
 namespace RestaurantReservation.Db
@@ -19,6 +20,9 @@ namespace RestaurantReservation.Db
         public double CalculateTotalRevenueOfRestaurant(int restaurantId) 
             => throw new NotImplementedException();
         
+        public DbSet<ReservationsFullDetails> ReservationsFullDetails { get; set; }
+        public DbSet<EmployeesWithRestaurantDetails> EmployeesWithRestaurantDetails { get; set; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=DESKTOP-EKG9OL3\SQLEXPRESS;Database=RestaurantReservationCore;Trusted_Connection=True;")
@@ -28,7 +32,12 @@ namespace RestaurantReservation.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ReservationsFullDetails>().HasNoKey()
+                .ToView(nameof(ReservationsFullDetails));
             
+            modelBuilder.Entity<EmployeesWithRestaurantDetails>().HasNoKey()
+                .ToView(nameof(EmployeesWithRestaurantDetails));
+
         }
     }
 }
