@@ -2,7 +2,7 @@
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Services.Interfaces;
 
-namespace RestaurantReservation.Services;
+namespace RestaurantReservation.Services.TableServices;
 
 public class TableService: ITableService
 {

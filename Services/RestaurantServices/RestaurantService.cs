@@ -1,6 +1,5 @@
 ﻿using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Services.Interfaces;
 
 namespace RestaurantReservation.Services.RestaurantServices;
 
