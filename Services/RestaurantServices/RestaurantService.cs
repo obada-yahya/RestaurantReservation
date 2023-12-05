@@ -12,17 +12,19 @@ public class RestaurantService: IRestaurantService
         _context = context;
     }
 
-    public void AddRestaurant(Restaurant restaurant)
+    public Restaurant AddRestaurant(Restaurant restaurant)
     {
         try
         {
             _context.Restaurants.Add(restaurant);
             _context.SaveChanges();
+            return restaurant;
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
+        return null!;
     }
 
     public IEnumerable<Restaurant> GetRestaurants()
