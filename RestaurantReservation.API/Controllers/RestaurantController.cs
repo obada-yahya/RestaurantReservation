@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using RestaurantReservation.Db.RestaurantReservationDomain;
+﻿using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.Dtos;
 using RestaurantReservation.Services.RestaurantServices;
 
@@ -11,50 +9,37 @@ namespace RestaurantReservation.API.Controllers;
 public class RestaurantController : Controller
 {
     private readonly IRestaurantService _restaurantService;
-    private readonly IMapper _mapper;
     private readonly ILogger<RestaurantController> _logger;
 
-    public RestaurantController(IRestaurantService restaurantService, IMapper mapper, ILogger<RestaurantController> logger)
+    public RestaurantController(IRestaurantService restaurantService, ILogger<RestaurantController> logger)
     {
         _restaurantService = restaurantService;
-        _mapper = mapper;
         _logger = logger;
     }
     
     [HttpGet("/Restaurants")]
-    public IActionResult GetRestaurants()
+    public async Task<IActionResult> GetRestaurants()
     {
-        return Ok(_restaurantService.GetRestaurants());
+        return Ok(await _restaurantService.GetRestaurants());
     }
 
     [HttpGet("/Restaurants/{restaurantId:int}", Name = "FindRestaurant")]
-    public IActionResult FindRestaurant(int restaurantId)
+    public async Task<IActionResult> FindRestaurant(int restaurantId)
     {
-        var restaurant = _restaurantService.FindRestaurant(restaurantId);
+        var restaurant = await _restaurantService.FindRestaurant(restaurantId);
         if (restaurant is null)
         {
             return NotFound();
         }
         return Ok(restaurant);
     }
-    
-    [HttpDelete("/Restaurants/{restaurantId}")]
-    public IActionResult DeleteRestaurant(int restaurantId)
-    {
-        if (_restaurantService.FindRestaurant(restaurantId) is null)
-        {
-            return BadRequest("No restaurant was found with the specified ID.");
-        }
-        _restaurantService.DeleteRestaurant(restaurantId);
-        return Ok($"The restaurant with ID {restaurantId} has been successfully deleted.");
-    }
 
     [HttpPost("/Restaurants")]
-    public IActionResult AddRestaurant(RestaurantForCreationDto restaurantForCreationDto)
+    public async Task<IActionResult> AddRestaurant(RestaurantForCreationDto restaurantForCreationDto)
     {
         try
         {
-            var addRestaurant = _restaurantService.AddRestaurant(restaurantForCreationDto);
+            var addRestaurant = await _restaurantService.AddRestaurant(restaurantForCreationDto);
             return CreatedAtRoute(
                 "FindRestaurant",
                 new
@@ -62,6 +47,25 @@ public class RestaurantController : Controller
                     restaurantId = addRestaurant.Id
                 },
                 addRestaurant);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+        }
+        return StatusCode(StatusCodes.Status500InternalServerError);
+    }
+    
+    [HttpDelete("/Restaurants/{restaurantId:int}")]
+    public async Task<IActionResult> DeleteRestaurant(int restaurantId)
+    {
+        try
+        {
+            if (await _restaurantService.FindRestaurant(restaurantId) is null)
+            {
+                return BadRequest("No restaurant was found with the specified ID.");
+            }
+            await _restaurantService.DeleteRestaurant(restaurantId);
+            return Ok($"The restaurant with ID {restaurantId} has been successfully deleted.");
         }
         catch (Exception e)
         {

@@ -1,45 +1,41 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Dtos;
+using RestaurantReservation.Repositories.RestaurantRepositories;
 
 namespace RestaurantReservation.Services.RestaurantServices;
 
 public class RestaurantService: IRestaurantService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly IRestaurantRepository _restaurantRepository;
     private readonly IMapper _mapper; 
 
-    public RestaurantService(RestaurantReservationDbContext context, IMapper mapper)
+    public RestaurantService(IMapper mapper, IRestaurantRepository restaurantRepository)
     {
-        _context = context;
         _mapper = mapper;
+        _restaurantRepository = restaurantRepository;
     }
 
-    public RestaurantDto AddRestaurant(RestaurantForCreationDto restaurant)
+    public async Task<RestaurantDto?> AddRestaurant(RestaurantForCreationDto restaurant)
     {
         try
         {
             var restaurantDomain = _mapper.Map<Restaurant>(restaurant);
-            _context.Restaurants.Add(restaurantDomain);
-            _context.SaveChanges();
+            restaurantDomain = await _restaurantRepository.AddRestaurant(restaurantDomain);
             return _mapper.Map<RestaurantDto>(restaurantDomain);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return null!;
+        return null;
     }
 
-    public IEnumerable<RestaurantDto> GetRestaurants()
+    public async Task<IEnumerable<RestaurantDto>> GetRestaurants()
     {
         try
         {
-            return _mapper
-                   .Map<IEnumerable<RestaurantDto>>
-                   (_context.Restaurants.AsNoTracking());
+            return _mapper.Map<IEnumerable<RestaurantDto>>(await _restaurantRepository.GetRestaurants());
         }
         catch (Exception e)
         {
@@ -48,14 +44,11 @@ public class RestaurantService: IRestaurantService
         return new List<RestaurantDto>();
     }
     
-    public RestaurantDto? FindRestaurant(int id)
+    public async Task<RestaurantDto?> FindRestaurant(int id)
     {
         try
         {
-            var restaurantModel = _context
-                .Restaurants
-                .AsNoTracking()
-                .Single(restaurant => restaurant.Id == id);
+            var restaurantModel = await _restaurantRepository.FindRestaurant(id);
             return _mapper.Map<RestaurantDto>(restaurantModel);
         }
         catch (Exception e)
@@ -65,13 +58,12 @@ public class RestaurantService: IRestaurantService
         return null;
     }
     
-    public void UpdateRestaurant(RestaurantDto restaurant)
+    public async Task UpdateRestaurant(RestaurantDto restaurant)
     {
         try
         {
-            var restaurantDto = _mapper.Map<Restaurant>(restaurant);
-            _context.Restaurants.Update(restaurantDto);
-            _context.SaveChanges();
+            var restaurantModel = _mapper.Map<Restaurant>(restaurant);
+            await _restaurantRepository.UpdateRestaurant(restaurantModel);
         }
         catch (Exception e)
         {
@@ -79,12 +71,11 @@ public class RestaurantService: IRestaurantService
         }
     }
     
-    public void DeleteRestaurant(int id)
+    public async Task DeleteRestaurant(int id)
     {
         try
         {
-            _context.Restaurants.Remove(new Restaurant(){Id = id});
-            _context.SaveChanges();
+            await _restaurantRepository.DeleteRestaurant(id);
         }
         catch (Exception e)
         {

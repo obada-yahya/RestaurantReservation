@@ -1,5 +1,6 @@
 using RestaurantReservation.Db;
 using RestaurantReservation.Profiles;
+using RestaurantReservation.Repositories.RestaurantRepositories;
 using RestaurantReservation.Services.RestaurantServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<RestaurantReservationDbContext>();
+builder.Services.AddTransient<IRestaurantRepository, RestaurantRepository>();
 builder.Services.AddAutoMapper(typeof(RestaurantProfile));
 builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 
