@@ -1,12 +1,13 @@
 ﻿using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Dtos;
 
 namespace RestaurantReservation.Services.RestaurantServices;
 
 public interface IRestaurantService
 {
-    public Restaurant AddRestaurant(Restaurant restaurant);
-    public IEnumerable<Restaurant> GetRestaurants();
-    public Restaurant? FindRestaurant(int id);
-    public void UpdateRestaurant(Restaurant restaurant);
+    public RestaurantDto AddRestaurant(RestaurantForCreationDto restaurant);
+    public IEnumerable<RestaurantDto> GetRestaurants();
+    public RestaurantDto? FindRestaurant(int id);
+    public void UpdateRestaurant(RestaurantDto restaurant);
     public void DeleteRestaurant(int id);
 }

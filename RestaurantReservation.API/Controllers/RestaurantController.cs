@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantReservation.API.Dtos;
 using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Dtos;
 using RestaurantReservation.Services.RestaurantServices;
 
 namespace RestaurantReservation.API.Controllers;
@@ -27,7 +27,7 @@ public class RestaurantController : Controller
         return Ok(_restaurantService.GetRestaurants());
     }
 
-    [HttpGet("/Restaurants/{restaurantId:int}",Name = "FindRestaurant")]
+    [HttpGet("/Restaurants/{restaurantId:int}", Name = "FindRestaurant")]
     public IActionResult FindRestaurant(int restaurantId)
     {
         var restaurant = _restaurantService.FindRestaurant(restaurantId);
@@ -46,7 +46,7 @@ public class RestaurantController : Controller
             return BadRequest("No restaurant was found with the specified ID.");
         }
         _restaurantService.DeleteRestaurant(restaurantId);
-        return Ok($"Deleted The Restaurant With {restaurantId}.");
+        return Ok($"The restaurant with ID {restaurantId} has been successfully deleted.");
     }
 
     [HttpPost("/Restaurants")]
@@ -54,9 +54,14 @@ public class RestaurantController : Controller
     {
         try
         {
-            var restaurant = _mapper.Map<Restaurant>(restaurantForCreationDto);
-            var addRestaurant = _restaurantService.AddRestaurant(restaurant);
-            return CreatedAtRoute("FindRestaurant", new { restaurantId = addRestaurant.Id }, addRestaurant);
+            var addRestaurant = _restaurantService.AddRestaurant(restaurantForCreationDto);
+            return CreatedAtRoute(
+                "FindRestaurant",
+                new
+                {
+                    restaurantId = addRestaurant.Id
+                },
+                addRestaurant);
         }
         catch (Exception e)
         {

@@ -17,8 +17,12 @@ public class CustomerService : ICustomerService
     {
         try
         {
+            // wherever the services exists , also the dtos exists their
+            // Map Dto to entity
             _context.Customers.Add(customer);
             _context.SaveChanges();
+            // Map Entity to Dto
+            // return it
         }
         catch (Exception e)
         {

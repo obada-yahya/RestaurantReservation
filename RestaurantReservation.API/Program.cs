@@ -1,22 +1,19 @@
 using RestaurantReservation.Db;
+using RestaurantReservation.Profiles;
 using RestaurantReservation.Services.RestaurantServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<RestaurantReservationDbContext>();
+builder.Services.AddAutoMapper(typeof(RestaurantProfile));
 builder.Services.AddTransient<IRestaurantService, RestaurantService>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -1,24 +1,30 @@
-﻿using RestaurantReservation.Db;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Dtos;
 
 namespace RestaurantReservation.Services.RestaurantServices;
 
 public class RestaurantService: IRestaurantService
 {
     private readonly RestaurantReservationDbContext _context;
+    private readonly IMapper _mapper; 
 
-    public RestaurantService(RestaurantReservationDbContext context)
+    public RestaurantService(RestaurantReservationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public Restaurant AddRestaurant(Restaurant restaurant)
+    public RestaurantDto AddRestaurant(RestaurantForCreationDto restaurant)
     {
         try
         {
-            _context.Restaurants.Add(restaurant);
+            var restaurantDomain = _mapper.Map<Restaurant>(restaurant);
+            _context.Restaurants.Add(restaurantDomain);
             _context.SaveChanges();
-            return restaurant;
+            return _mapper.Map<RestaurantDto>(restaurantDomain);
         }
         catch (Exception e)
         {
@@ -27,24 +33,30 @@ public class RestaurantService: IRestaurantService
         return null!;
     }
 
-    public IEnumerable<Restaurant> GetRestaurants()
+    public IEnumerable<RestaurantDto> GetRestaurants()
     {
         try
         {
-            return _context.Restaurants;
+            return _mapper
+                   .Map<IEnumerable<RestaurantDto>>
+                   (_context.Restaurants.AsNoTracking());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Restaurant>();
+        return new List<RestaurantDto>();
     }
     
-    public Restaurant? FindRestaurant(int id)
+    public RestaurantDto? FindRestaurant(int id)
     {
         try
         {
-            return _context.Restaurants.Single(restaurant => restaurant.Id == id);
+            var restaurantModel = _context
+                .Restaurants
+                .AsNoTracking()
+                .Single(restaurant => restaurant.Id == id);
+            return _mapper.Map<RestaurantDto>(restaurantModel);
         }
         catch (Exception e)
         {
@@ -53,11 +65,12 @@ public class RestaurantService: IRestaurantService
         return null;
     }
     
-    public void UpdateRestaurant(Restaurant restaurant)
+    public void UpdateRestaurant(RestaurantDto restaurant)
     {
         try
         {
-            _context.Restaurants.Update(restaurant);
+            var restaurantDto = _mapper.Map<Restaurant>(restaurant);
+            _context.Restaurants.Update(restaurantDto);
             _context.SaveChanges();
         }
         catch (Exception e)
