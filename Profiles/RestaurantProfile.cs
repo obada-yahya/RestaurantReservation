@@ -10,6 +10,8 @@ public class RestaurantProfile : Profile
     {
         CreateMap<RestaurantForCreationDto, Restaurant>();
         CreateMap<Restaurant, RestaurantDto>();
+        CreateMap<RestaurantDto, Restaurant>();
         CreateMap<RestaurantForCreationDto, RestaurantDto>();
+        CreateMap<RestaurantForUpdateDto, RestaurantDto>();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Dtos;
 
 namespace RestaurantReservation.Repositories.RestaurantRepositories;
 

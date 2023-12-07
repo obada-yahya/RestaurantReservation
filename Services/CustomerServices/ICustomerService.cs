@@ -1,6 +1,4 @@
-﻿using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Dtos.CustomerDtos;
-using RestaurantReservation.Dtos.RestaurantDtos;
+﻿using RestaurantReservation.Dtos.CustomerDtos;
 
 namespace RestaurantReservation.Services.CustomerServices;
 
