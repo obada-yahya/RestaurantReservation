@@ -1,36 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Db;
-using RestaurantReservation.Db.RestaurantReservationDomain;
+﻿using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Repositories.CustomerRepositories;
 
 namespace RestaurantReservation.Services.CustomerServices;
 
 public class CustomerService : ICustomerService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly ICustomerRepository _customerRepository;
 
-    public CustomerService(RestaurantReservationDbContext context)
+    public CustomerService(ICustomerRepository customerRepository)
     {
-        _context = context;
+        _customerRepository = customerRepository;
     }
 
-    public void AddCustomer(Customer customer)
+    public async Task<Customer?> AddCustomerAsync(Customer customer)
     {
         try
         {
-            _context.Customers.Add(customer);
-            _context.SaveChanges();
+            await _customerRepository.AddCustomerAsync(customer);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
+        return null;
     }
 
-    public IEnumerable<Customer> GetCustomers()
+    public async Task<IEnumerable<Customer>> GetCustomersAsync()
     {
         try
         {
-            return _context.Customers.Include(customer => customer.Reservations);
+            return await _customerRepository.GetCustomersAsync();
         }
         catch (Exception e)
         {
@@ -39,14 +38,11 @@ public class CustomerService : ICustomerService
         return new List<Customer>();
     }
     
-    public Customer? FindCustomer(int id)
+    public async Task<Customer?> FindCustomerAsync(int id)
     {
         try
         {
-            return _context
-                .Customers
-                .Include(customer => customer.Reservations)
-                .Single(customer => customer.Id == id);
+            return await _customerRepository.FindCustomerAsync(id);
         }
         catch (Exception e)
         {
@@ -55,12 +51,11 @@ public class CustomerService : ICustomerService
         return null;
     }
     
-    public void UpdateCustomer(Customer customer)
+    public async Task UpdateCustomerAsync(Customer customer)
     {
         try
         {
-            _context.Customers.Update(customer);
-            _context.SaveChanges();
+            await _customerRepository.UpdateCustomerAsync(customer);
         }
         catch (Exception e)
         {
@@ -68,12 +63,11 @@ public class CustomerService : ICustomerService
         }
     }
     
-    public void DeleteCustomer(int id)
+    public async Task DeleteCustomerAsync(int id)
     {
         try
         {
-            _context.Customers.Remove(new Customer(){Id = id});
-            _context.SaveChanges();
+            await _customerRepository.DeleteCustomerAsync(id);
         }
         catch (Exception e)
         {

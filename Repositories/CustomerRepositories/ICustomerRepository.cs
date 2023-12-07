@@ -1,8 +1,8 @@
 ﻿using RestaurantReservation.Db.RestaurantReservationDomain;
 
-namespace RestaurantReservation.Services.CustomerServices;
+namespace RestaurantReservation.Repositories.CustomerRepositories;
 
-public interface ICustomerService
+public interface ICustomerRepository
 {
     public Task<Customer?> AddCustomerAsync(Customer customer);
     public Task<IEnumerable<Customer>> GetCustomersAsync();

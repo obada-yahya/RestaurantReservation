@@ -2,24 +2,24 @@
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 
-namespace RestaurantReservation.Repositories.RestaurantRepositories;
+namespace RestaurantReservation.Repositories.CustomerRepositories;
 
-public class RestaurantRepository : IRestaurantRepository
+public class CustomerRepository : ICustomerRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
-    public RestaurantRepository(RestaurantReservationDbContext restaurantReservationDbContext)
+    public CustomerRepository(RestaurantReservationDbContext context)
     {
-        _context = restaurantReservationDbContext;
+        _context = context;
     }
 
-    public async Task<Restaurant?> AddRestaurantAsync(Restaurant restaurant)
+    public async Task<Customer?> AddCustomerAsync(Customer customer)
     {
         try
         {
-            await _context.Restaurants.AddAsync(restaurant);
+            await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
-            return restaurant;
+            return customer;
         }
         catch (Exception e)
         {
@@ -28,12 +28,12 @@ public class RestaurantRepository : IRestaurantRepository
         return null;
     }
 
-    public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync()
+    public async Task<IEnumerable<Customer>> GetCustomersAsync()
     {
         try
         {
             return await _context
-                .Restaurants
+                .Customers
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -41,17 +41,17 @@ public class RestaurantRepository : IRestaurantRepository
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Restaurant>();
+        return new List<Customer>();
     }
 
-    public async Task<Restaurant?> FindRestaurantAsync(int id)
+    public async Task<Customer?> FindCustomerAsync(int id)
     {
         try
         {
             return await _context
-                .Restaurants
+                .Customers
                 .AsNoTracking()
-                .SingleAsync(restaurant => restaurant.Id == id);
+                .SingleAsync(customer => customer.Id == id);
         }
         catch (Exception e)
         {
@@ -60,15 +60,15 @@ public class RestaurantRepository : IRestaurantRepository
         return null;
     }
 
-    public async Task UpdateRestaurantAsync(Restaurant restaurant)
+    public async Task UpdateCustomerAsync(Customer customer)
     {
-        _context.Restaurants.Update(restaurant);
+        _context.Customers.Update(customer);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteRestaurantAsync(int id)
+    public async Task DeleteCustomerAsync(int id)
     {
-        _context.Restaurants.Remove(new Restaurant() { Id = id });
+        _context.Customers.Remove(new Customer(){Id = id});
         await _context.SaveChangesAsync();
     }
 }
