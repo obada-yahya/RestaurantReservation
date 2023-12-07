@@ -20,13 +20,13 @@ public class RestaurantController : Controller
     [HttpGet("/Restaurants")]
     public async Task<IActionResult> GetRestaurants()
     {
-        return Ok(await _restaurantService.GetRestaurants());
+        return Ok(await _restaurantService.GetRestaurantsAsync());
     }
 
     [HttpGet("/Restaurants/{restaurantId:int}", Name = "FindRestaurant")]
     public async Task<IActionResult> FindRestaurant(int restaurantId)
     {
-        var restaurant = await _restaurantService.FindRestaurant(restaurantId);
+        var restaurant = await _restaurantService.FindRestaurantAsync(restaurantId);
         if (restaurant is null)
         {
             return NotFound();
@@ -39,7 +39,7 @@ public class RestaurantController : Controller
     {
         try
         {
-            var addRestaurant = await _restaurantService.AddRestaurant(restaurantForCreationDto);
+            var addRestaurant = await _restaurantService.AddRestaurantAsync(restaurantForCreationDto);
             return CreatedAtRoute(
                 "FindRestaurant",
                 new
@@ -60,11 +60,11 @@ public class RestaurantController : Controller
     {
         try
         {
-            if (await _restaurantService.FindRestaurant(restaurantId) is null)
+            if (await _restaurantService.FindRestaurantAsync(restaurantId) is null)
             {
                 return BadRequest("No restaurant was found with the specified ID.");
             }
-            await _restaurantService.DeleteRestaurant(restaurantId);
+            await _restaurantService.DeleteRestaurantAsync(restaurantId);
             return Ok($"The restaurant with ID {restaurantId} has been successfully deleted.");
         }
         catch (Exception e)

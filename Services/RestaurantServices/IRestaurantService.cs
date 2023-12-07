@@ -4,9 +4,9 @@ namespace RestaurantReservation.Services.RestaurantServices;
 
 public interface IRestaurantService
 {
-    public Task<RestaurantDto?> AddRestaurant(RestaurantForCreationDto restaurant);
-    public Task<IEnumerable<RestaurantDto>> GetRestaurants();
-    public Task<RestaurantDto?> FindRestaurant(int id);
-    public Task UpdateRestaurant(RestaurantDto restaurant);
-    public Task DeleteRestaurant(int id);
+    public Task<RestaurantDto?> AddRestaurantAsync(RestaurantForCreationDto restaurant);
+    public Task<IEnumerable<RestaurantDto>> GetRestaurantsAsync();
+    public Task<RestaurantDto?> FindRestaurantAsync(int id);
+    public Task UpdateRestaurantAsync(RestaurantDto restaurant);
+    public Task DeleteRestaurantAsync(int id);
 }

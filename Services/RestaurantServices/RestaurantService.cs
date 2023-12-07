@@ -16,12 +16,12 @@ public class RestaurantService: IRestaurantService
         _restaurantRepository = restaurantRepository;
     }
 
-    public async Task<RestaurantDto?> AddRestaurant(RestaurantForCreationDto restaurant)
+    public async Task<RestaurantDto?> AddRestaurantAsync(RestaurantForCreationDto restaurant)
     {
         try
         {
             var restaurantDomain = _mapper.Map<Restaurant>(restaurant);
-            restaurantDomain = await _restaurantRepository.AddRestaurant(restaurantDomain);
+            restaurantDomain = await _restaurantRepository.AddRestaurantAsync(restaurantDomain);
             return _mapper.Map<RestaurantDto>(restaurantDomain);
         }
         catch (Exception e)
@@ -31,11 +31,11 @@ public class RestaurantService: IRestaurantService
         return null;
     }
 
-    public async Task<IEnumerable<RestaurantDto>> GetRestaurants()
+    public async Task<IEnumerable<RestaurantDto>> GetRestaurantsAsync()
     {
         try
         {
-            return _mapper.Map<IEnumerable<RestaurantDto>>(await _restaurantRepository.GetRestaurants());
+            return _mapper.Map<IEnumerable<RestaurantDto>>(await _restaurantRepository.GetRestaurantsAsync());
         }
         catch (Exception e)
         {
@@ -44,11 +44,11 @@ public class RestaurantService: IRestaurantService
         return new List<RestaurantDto>();
     }
     
-    public async Task<RestaurantDto?> FindRestaurant(int id)
+    public async Task<RestaurantDto?> FindRestaurantAsync(int id)
     {
         try
         {
-            var restaurantModel = await _restaurantRepository.FindRestaurant(id);
+            var restaurantModel = await _restaurantRepository.FindRestaurantAsync(id);
             return _mapper.Map<RestaurantDto>(restaurantModel);
         }
         catch (Exception e)
@@ -58,12 +58,12 @@ public class RestaurantService: IRestaurantService
         return null;
     }
     
-    public async Task UpdateRestaurant(RestaurantDto restaurant)
+    public async Task UpdateRestaurantAsync(RestaurantDto restaurant)
     {
         try
         {
             var restaurantModel = _mapper.Map<Restaurant>(restaurant);
-            await _restaurantRepository.UpdateRestaurant(restaurantModel);
+            await _restaurantRepository.UpdateRestaurantAsync(restaurantModel);
         }
         catch (Exception e)
         {
@@ -71,11 +71,11 @@ public class RestaurantService: IRestaurantService
         }
     }
     
-    public async Task DeleteRestaurant(int id)
+    public async Task DeleteRestaurantAsync(int id)
     {
         try
         {
-            await _restaurantRepository.DeleteRestaurant(id);
+            await _restaurantRepository.DeleteRestaurantAsync(id);
         }
         catch (Exception e)
         {

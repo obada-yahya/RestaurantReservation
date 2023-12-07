@@ -13,7 +13,7 @@ public class RestaurantRepository : IRestaurantRepository
         _context = restaurantReservationDbContext;
     }
 
-    public async Task<Restaurant?> AddRestaurant(Restaurant restaurant)
+    public async Task<Restaurant?> AddRestaurantAsync(Restaurant restaurant)
     {
         try
         {
@@ -28,7 +28,7 @@ public class RestaurantRepository : IRestaurantRepository
         return null;
     }
 
-    public async Task<IEnumerable<Restaurant>> GetRestaurants()
+    public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync()
     {
         try
         {
@@ -41,7 +41,7 @@ public class RestaurantRepository : IRestaurantRepository
         return new List<Restaurant>();
     }
 
-    public async Task<Restaurant?> FindRestaurant(int id)
+    public async Task<Restaurant?> FindRestaurantAsync(int id)
     {
         try
         {
@@ -57,13 +57,13 @@ public class RestaurantRepository : IRestaurantRepository
         return null;
     }
 
-    public async Task UpdateRestaurant(Restaurant restaurant)
+    public async Task UpdateRestaurantAsync(Restaurant restaurant)
     {
         _context.Restaurants.Update(restaurant);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteRestaurant(int id)
+    public async Task DeleteRestaurantAsync(int id)
     {
         _context.Restaurants.Remove(new Restaurant() { Id = id });
         await _context.SaveChangesAsync();
