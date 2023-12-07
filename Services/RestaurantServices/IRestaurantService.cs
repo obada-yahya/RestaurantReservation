@@ -1,4 +1,5 @@
 ﻿using RestaurantReservation.Dtos;
+using RestaurantReservation.Dtos.RestaurantDtos;
 
 namespace RestaurantReservation.Services.RestaurantServices;
 

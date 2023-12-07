@@ -1,4 +1,6 @@
-﻿using RestaurantReservation.Db.RestaurantReservationDomain;
+﻿using AutoMapper;
+using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Dtos.CustomerDtos;
 using RestaurantReservation.Repositories.CustomerRepositories;
 
 namespace RestaurantReservation.Services.CustomerServices;
@@ -6,17 +8,21 @@ namespace RestaurantReservation.Services.CustomerServices;
 public class CustomerService : ICustomerService
 {
     private readonly ICustomerRepository _customerRepository;
+    private readonly IMapper _mapper;
 
-    public CustomerService(ICustomerRepository customerRepository)
+    public CustomerService(ICustomerRepository customerRepository, IMapper mapper)
     {
         _customerRepository = customerRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Customer?> AddCustomerAsync(Customer customer)
+    public async Task<CustomerDto?> AddCustomerAsync(CustomerForCreationDto customer)
     {
         try
         {
-            await _customerRepository.AddCustomerAsync(customer);
+            var customerModel = _mapper.Map<Customer>(customer);
+            customerModel = await _customerRepository.AddCustomerAsync(customerModel);
+            return _mapper.Map<CustomerDto>(customerModel);
         }
         catch (Exception e)
         {
@@ -25,24 +31,26 @@ public class CustomerService : ICustomerService
         return null;
     }
 
-    public async Task<IEnumerable<Customer>> GetCustomersAsync()
+    public async Task<IEnumerable<CustomerDto>> GetCustomersAsync()
     {
         try
         {
-            return await _customerRepository.GetCustomersAsync();
+            return _mapper.Map<IEnumerable<CustomerDto>>
+                (await _customerRepository.GetCustomersAsync());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Customer>();
+        return new List<CustomerDto>();
     }
     
-    public async Task<Customer?> FindCustomerAsync(int id)
+    public async Task<CustomerDto?> FindCustomerAsync(int id)
     {
         try
         {
-            return await _customerRepository.FindCustomerAsync(id);
+            var customerModel = await _customerRepository.FindCustomerAsync(id);
+            return _mapper.Map<CustomerDto>(customerModel);
         }
         catch (Exception e)
         {
@@ -51,11 +59,12 @@ public class CustomerService : ICustomerService
         return null;
     }
     
-    public async Task UpdateCustomerAsync(Customer customer)
+    public async Task UpdateCustomerAsync(CustomerDto customer)
     {
         try
         {
-            await _customerRepository.UpdateCustomerAsync(customer);
+            var customerModel = _mapper.Map<Customer>(customer);
+            await _customerRepository.UpdateCustomerAsync(customerModel);
         }
         catch (Exception e)
         {

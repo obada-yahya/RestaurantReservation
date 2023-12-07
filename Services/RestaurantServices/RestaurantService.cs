@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Dtos;
+using RestaurantReservation.Dtos.RestaurantDtos;
 using RestaurantReservation.Repositories.RestaurantRepositories;
 
 namespace RestaurantReservation.Services.RestaurantServices;
@@ -10,19 +10,19 @@ public class RestaurantService: IRestaurantService
     private readonly IRestaurantRepository _restaurantRepository;
     private readonly IMapper _mapper; 
 
-    public RestaurantService(IMapper mapper, IRestaurantRepository restaurantRepository)
+    public RestaurantService(IRestaurantRepository restaurantRepository,IMapper mapper)
     {
-        _mapper = mapper;
         _restaurantRepository = restaurantRepository;
+        _mapper = mapper;
     }
 
     public async Task<RestaurantDto?> AddRestaurantAsync(RestaurantForCreationDto restaurant)
     {
         try
         {
-            var restaurantDomain = _mapper.Map<Restaurant>(restaurant);
-            restaurantDomain = await _restaurantRepository.AddRestaurantAsync(restaurantDomain);
-            return _mapper.Map<RestaurantDto>(restaurantDomain);
+            var restaurantModel = _mapper.Map<Restaurant>(restaurant);
+            restaurantModel = await _restaurantRepository.AddRestaurantAsync(restaurantModel);
+            return _mapper.Map<RestaurantDto>(restaurantModel);
         }
         catch (Exception e)
         {
@@ -35,7 +35,8 @@ public class RestaurantService: IRestaurantService
     {
         try
         {
-            return _mapper.Map<IEnumerable<RestaurantDto>>(await _restaurantRepository.GetRestaurantsAsync());
+            return _mapper.Map<IEnumerable<RestaurantDto>>
+                (await _restaurantRepository.GetRestaurantsAsync());
         }
         catch (Exception e)
         {

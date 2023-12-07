@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.Dtos;
+using RestaurantReservation.Dtos.RestaurantDtos;
 using RestaurantReservation.Services.RestaurantServices;
 
 namespace RestaurantReservation.API.Controllers;

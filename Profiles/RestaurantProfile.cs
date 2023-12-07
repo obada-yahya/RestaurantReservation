@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Dtos;
+using RestaurantReservation.Dtos.RestaurantDtos;
 
 namespace RestaurantReservation.Profiles;
 
