@@ -1,49 +1,56 @@
-﻿using RestaurantReservation.Db;
+﻿using AutoMapper;
 using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Services.Interfaces;
+using RestaurantReservation.Dtos.RestaurantDtos;
+using RestaurantReservation.Repositories.RestaurantRepositories;
 
 namespace RestaurantReservation.Services.RestaurantServices;
 
 public class RestaurantService: IRestaurantService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly IRestaurantRepository _restaurantRepository;
+    private readonly IMapper _mapper; 
 
-    public RestaurantService(RestaurantReservationDbContext context)
+    public RestaurantService(IRestaurantRepository restaurantRepository,IMapper mapper)
     {
-        _context = context;
+        _restaurantRepository = restaurantRepository;
+        _mapper = mapper;
     }
 
-    public void AddRestaurant(Restaurant restaurant)
+    public async Task<RestaurantDto?> AddRestaurantAsync(RestaurantForCreationDto restaurant)
     {
         try
         {
-            _context.Restaurants.Add(restaurant);
-            _context.SaveChanges();
+            var restaurantModel = _mapper.Map<Restaurant>(restaurant);
+            restaurantModel = await _restaurantRepository.AddRestaurantAsync(restaurantModel);
+            return _mapper.Map<RestaurantDto>(restaurantModel);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
+        return null;
     }
 
-    public IEnumerable<Restaurant> GetRestaurants()
+    public async Task<IEnumerable<RestaurantDto>> GetRestaurantsAsync()
     {
         try
         {
-            return _context.Restaurants;
+            return _mapper.Map<IEnumerable<RestaurantDto>>
+                (await _restaurantRepository.GetRestaurantsAsync());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Restaurant>();
+        return new List<RestaurantDto>();
     }
     
-    public Restaurant? FindRestaurant(int id)
+    public async Task<RestaurantDto?> FindRestaurantAsync(int id)
     {
         try
         {
-            return _context.Restaurants.Single(restaurant => restaurant.Id == id);
+            var restaurantModel = await _restaurantRepository.FindRestaurantAsync(id);
+            return _mapper.Map<RestaurantDto>(restaurantModel);
         }
         catch (Exception e)
         {
@@ -52,25 +59,24 @@ public class RestaurantService: IRestaurantService
         return null;
     }
     
-    public void UpdateRestaurant(Restaurant restaurant)
+    public async Task UpdateRestaurantAsync(RestaurantDto restaurant)
     {
         try
         {
-            _context.Restaurants.Update(restaurant);
-            _context.SaveChanges();
+            var restaurantModel = _mapper.Map<Restaurant>(restaurant);
+            await _restaurantRepository.UpdateRestaurantAsync(restaurantModel);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            throw new InvalidOperationException();
         }
     }
     
-    public void DeleteRestaurant(int id)
+    public async Task DeleteRestaurantAsync(int id)
     {
         try
         {
-            _context.Restaurants.Remove(new Restaurant(){Id = id});
-            _context.SaveChanges();
+            await _restaurantRepository.DeleteRestaurantAsync(id);
         }
         catch (Exception e)
         {

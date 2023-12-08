@@ -1,52 +1,56 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Db;
+﻿using AutoMapper;
 using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Dtos.CustomerDtos;
+using RestaurantReservation.Repositories.CustomerRepositories;
 
 namespace RestaurantReservation.Services.CustomerServices;
 
 public class CustomerService : ICustomerService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly ICustomerRepository _customerRepository;
+    private readonly IMapper _mapper;
 
-    public CustomerService(RestaurantReservationDbContext context)
+    public CustomerService(ICustomerRepository customerRepository, IMapper mapper)
     {
-        _context = context;
+        _customerRepository = customerRepository;
+        _mapper = mapper;
     }
 
-    public void AddCustomer(Customer customer)
+    public async Task<CustomerDto?> AddCustomerAsync(CustomerForCreationDto customer)
     {
         try
         {
-            _context.Customers.Add(customer);
-            _context.SaveChanges();
+            var customerModel = _mapper.Map<Customer>(customer);
+            customerModel = await _customerRepository.AddCustomerAsync(customerModel);
+            return _mapper.Map<CustomerDto>(customerModel);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
+        return null;
     }
 
-    public IEnumerable<Customer> GetCustomers()
+    public async Task<IEnumerable<CustomerDto>> GetCustomersAsync()
     {
         try
         {
-            return _context.Customers.Include(customer => customer.Reservations);
+            return _mapper.Map<IEnumerable<CustomerDto>>
+                (await _customerRepository.GetCustomersAsync());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Customer>();
+        return new List<CustomerDto>();
     }
     
-    public Customer? FindCustomer(int id)
+    public async Task<CustomerDto?> FindCustomerAsync(int id)
     {
         try
         {
-            return _context
-                .Customers
-                .Include(customer => customer.Reservations)
-                .Single(customer => customer.Id == id);
+            var customerModel = await _customerRepository.FindCustomerAsync(id);
+            return _mapper.Map<CustomerDto>(customerModel);
         }
         catch (Exception e)
         {
@@ -55,12 +59,12 @@ public class CustomerService : ICustomerService
         return null;
     }
     
-    public void UpdateCustomer(Customer customer)
+    public async Task UpdateCustomerAsync(CustomerDto customer)
     {
         try
         {
-            _context.Customers.Update(customer);
-            _context.SaveChanges();
+            var customerModel = _mapper.Map<Customer>(customer);
+            await _customerRepository.UpdateCustomerAsync(customerModel);
         }
         catch (Exception e)
         {
@@ -68,12 +72,11 @@ public class CustomerService : ICustomerService
         }
     }
     
-    public void DeleteCustomer(int id)
+    public async Task DeleteCustomerAsync(int id)
     {
         try
         {
-            _context.Customers.Remove(new Customer(){Id = id});
-            _context.SaveChanges();
+            await _customerRepository.DeleteCustomerAsync(id);
         }
         catch (Exception e)
         {

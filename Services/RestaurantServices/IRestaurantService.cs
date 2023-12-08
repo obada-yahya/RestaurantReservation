@@ -1,12 +1,13 @@
-﻿using RestaurantReservation.Db.RestaurantReservationDomain;
+﻿using RestaurantReservation.Dtos;
+using RestaurantReservation.Dtos.RestaurantDtos;
 
 namespace RestaurantReservation.Services.RestaurantServices;
 
 public interface IRestaurantService
 {
-    public void AddRestaurant(Restaurant restaurant);
-    public IEnumerable<Restaurant> GetRestaurants();
-    public Restaurant? FindRestaurant(int id);
-    public void UpdateRestaurant(Restaurant restaurant);
-    public void DeleteRestaurant(int id);
+    public Task<RestaurantDto?> AddRestaurantAsync(RestaurantForCreationDto restaurant);
+    public Task<IEnumerable<RestaurantDto>> GetRestaurantsAsync();
+    public Task<RestaurantDto?> FindRestaurantAsync(int id);
+    public Task UpdateRestaurantAsync(RestaurantDto restaurant);
+    public Task DeleteRestaurantAsync(int id);
 }
