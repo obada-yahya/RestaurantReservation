@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantReservation.Dtos;
 using RestaurantReservation.Dtos.RestaurantDtos;
 using RestaurantReservation.Services.RestaurantServices;
 
@@ -21,14 +20,14 @@ public class RestaurantController : Controller
         _mapper = mapper;
     }
     
-    [HttpGet("/Restaurants")]
-    public async Task<IActionResult> GetRestaurants()
+    [HttpGet]
+    public async Task<IActionResult> GetRestaurantsAsync()
     {
         return Ok(await _restaurantService.GetRestaurantsAsync());
     }
 
-    [HttpGet("/Restaurants/{restaurantId:int}", Name = "FindRestaurant")]
-    public async Task<IActionResult> FindRestaurant(int restaurantId)
+    [HttpGet("{restaurantId:int}", Name = "FindRestaurant")]
+    public async Task<IActionResult> FindRestaurantAsync(int restaurantId)
     {
         var restaurant = await _restaurantService.FindRestaurantAsync(restaurantId);
         if (restaurant is null)
@@ -38,8 +37,8 @@ public class RestaurantController : Controller
         return Ok(restaurant);
     }
 
-    [HttpPost("/Restaurants")]
-    public async Task<IActionResult> AddRestaurant(RestaurantForCreationDto restaurantForCreationDto)
+    [HttpPost]
+    public async Task<IActionResult> AddRestaurantAsync(RestaurantForCreationDto restaurantForCreationDto)
     {
         try
         {
@@ -59,8 +58,8 @@ public class RestaurantController : Controller
         return StatusCode(StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPut("/Restaurants/{restaurantId:int}")]
-    public async Task<IActionResult> UpdateRestaurant(int restaurantId,RestaurantForUpdateDto restaurantForUpdateDto)
+    [HttpPut("{restaurantId:int}")]
+    public async Task<IActionResult> UpdateRestaurantAsync(int restaurantId,RestaurantForUpdateDto restaurantForUpdateDto)
     {
         try
         {
@@ -80,8 +79,8 @@ public class RestaurantController : Controller
         return StatusCode(StatusCodes.Status500InternalServerError);
     }
     
-    [HttpDelete("/Restaurants/{restaurantId:int}")]
-    public async Task<IActionResult> DeleteRestaurant(int restaurantId)
+    [HttpDelete("{restaurantId:int}")]
+    public async Task<IActionResult> DeleteRestaurantAsync(int restaurantId)
     {
         try
         {
