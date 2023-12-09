@@ -42,14 +42,14 @@ public class RestaurantController : Controller
     {
         try
         {
-            var addRestaurant = await _restaurantService.AddRestaurantAsync(restaurantForCreationDto);
+            var addedRestaurant = await _restaurantService.AddRestaurantAsync(restaurantForCreationDto);
             return CreatedAtRoute(
                 "FindRestaurant",
                 new
                 {
-                    restaurantId = addRestaurant.Id
+                    restaurantId = addedRestaurant.Id
                 },
-                addRestaurant);
+                addedRestaurant);
         }
         catch (Exception e)
         {
@@ -63,13 +63,13 @@ public class RestaurantController : Controller
     {
         try
         {
-            var restaurant = await _restaurantService.FindRestaurantAsync(restaurantId);
-            if (restaurant is null)
+            var restaurantDto = await _restaurantService.FindRestaurantAsync(restaurantId);
+            if (restaurantDto is null)
             {
                 return NotFound();
             }
-            _mapper.Map(restaurantForUpdateDto, restaurant);
-            await _restaurantService.UpdateRestaurantAsync(restaurant);
+            _mapper.Map(restaurantForUpdateDto, restaurantDto);
+            await _restaurantService.UpdateRestaurantAsync(restaurantDto);
             return Ok($"The restaurant with ID {restaurantId} has been successfully Updated.");
         }
         catch (Exception e)
