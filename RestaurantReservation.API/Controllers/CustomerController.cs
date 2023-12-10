@@ -59,7 +59,7 @@ public class CustomerController : Controller
     }
     
     [HttpPut("{customerId:int}")]
-    public async Task<IActionResult> UpdateCustomerAsync(int customerId,CustomerForUpdateDto restaurantForUpdateDto)
+    public async Task<IActionResult> UpdateCustomerAsync(int customerId, CustomerForUpdateDto restaurantForUpdateDto)
     {
         try
         {
@@ -70,7 +70,7 @@ public class CustomerController : Controller
             }
             _mapper.Map(restaurantForUpdateDto, customerDto);
             await _customerService.UpdateCustomerAsync(customerDto);
-            return Ok($"The restaurant with ID {customerId} has been successfully Updated.");
+            return Ok($"The customer with ID {customerId} has been successfully Updated.");
         }
         catch (Exception e)
         {
@@ -86,10 +86,10 @@ public class CustomerController : Controller
         {
             if (await _customerService.FindCustomerAsync(customerId) is null)
             {
-                return BadRequest("No restaurant was found with the specified ID.");
+                return BadRequest("No customer was found with the specified ID.");
             }
             await _customerService.DeleteCustomerAsync(customerId);
-            return Ok($"The restaurant with ID {customerId} has been successfully deleted.");
+            return Ok($"The customer with ID {customerId} has been successfully deleted.");
         }
         catch (Exception e)
         {

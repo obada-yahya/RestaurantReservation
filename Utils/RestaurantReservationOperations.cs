@@ -1,6 +1,6 @@
 ﻿using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Services.EmployeeServices;
+using RestaurantReservation.Repositories.EmployeeRepositories;
 using RestaurantReservation.Services.ReservationServices;
 
 namespace RestaurantReservation.Utils;
@@ -60,12 +60,13 @@ public static class RestaurantReservationOperations
         return new List<MenuItem>();
     }
 
-    public static float? CalculateAverageOrderAmount(int employeeId)
+    public static async Task<float?> CalculateAverageOrderAmount(int employeeId)
     {
         try
         {
-            var employeeService = new EmployeeService(new RestaurantReservationDbContext());
-            return employeeService.FindEmployee(employeeId).OrdersServed.Sum(orderServed => orderServed.TotalAmount);
+            var employeeService = new EmployeeRepository(new RestaurantReservationDbContext());
+            var employee = await employeeService.FindEmployeeAsync(employeeId);
+            return employee.OrdersServed.Sum(orderServed => orderServed.TotalAmount);
         }
         catch (Exception e)
         {
