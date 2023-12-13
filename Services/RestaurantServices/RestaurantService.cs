@@ -10,7 +10,7 @@ public class RestaurantService: IRestaurantService
     private readonly IRestaurantRepository _restaurantRepository;
     private readonly IMapper _mapper; 
 
-    public RestaurantService(IRestaurantRepository restaurantRepository,IMapper mapper)
+    public RestaurantService(IRestaurantRepository restaurantRepository, IMapper mapper)
     {
         _restaurantRepository = restaurantRepository;
         _mapper = mapper;
@@ -68,7 +68,7 @@ public class RestaurantService: IRestaurantService
         }
         catch (Exception e)
         {
-            throw new InvalidOperationException();
+            Console.WriteLine(e.Message);
         }
     }
     

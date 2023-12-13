@@ -21,7 +21,7 @@ public class EmployeeController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetEmployeeAsync()
+    public async Task<IActionResult> GetEmployeesAsync()
     {
         return Ok(await _employeeService.GetEmployeesAsync());
     }

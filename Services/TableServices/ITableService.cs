@@ -1,12 +1,12 @@
-﻿using RestaurantReservation.Db.RestaurantReservationDomain;
+﻿using RestaurantReservation.Dtos.TableDtos;
 
 namespace RestaurantReservation.Services.TableServices;
 
 public interface ITableService
 {
-    public void AddTable(Table table);
-    public IEnumerable<Table> GetTables();
-    public Table? FindTable(int id);
-    public void UpdateTable(Table table);
-    public void DeleteTable(int id);
+    public Task<TableDto?> AddTableAsync(TableForCreationDto table);
+    public Task<IEnumerable<TableDto>> GetTablesAsync();
+    public Task<TableDto?> FindTableAsync(int id);
+    public Task UpdateTableAsync(TableDto table);
+    public Task DeleteTableAsync(int id);
 }
