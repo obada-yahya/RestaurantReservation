@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.Dtos.EmployeeDtos;
-using RestaurantReservation.Repositories.EmployeeRepositories;
 using RestaurantReservation.Services.EmployeeServices;
 
 namespace RestaurantReservation.API.Controllers;
@@ -44,6 +43,10 @@ public class EmployeeController : Controller
         try
         {
             var addedEmployee = await _employeeService.AddEmployeeAsync(employeeForCreationDto);
+            
+            if (addedEmployee is null) 
+                return BadRequest("Unable to process your request due to data constraints");
+            
             return CreatedAtRoute(
                 "FindEmployee",
                 new

@@ -43,6 +43,10 @@ public class CustomerController : Controller
         try
         {
             var addedCustomer = await _customerService.AddCustomerAsync(customerForCreationDto);
+            
+            if (addedCustomer is null) 
+                return BadRequest("Unable to process your request due to data constraints");
+            
             return CreatedAtRoute(
                 "FindCustomer",
                 new

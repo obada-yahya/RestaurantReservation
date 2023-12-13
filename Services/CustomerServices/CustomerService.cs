@@ -27,8 +27,8 @@ public class CustomerService : ICustomerService
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            throw;
         }
-        return null;
     }
 
     public async Task<IEnumerable<CustomerDto>> GetCustomersAsync()

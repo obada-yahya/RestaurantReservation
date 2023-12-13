@@ -21,11 +21,10 @@ public class CustomerRepository : ICustomerRepository
             await _context.SaveChangesAsync();
             return customer;
         }
-        catch (Exception e)
+        catch (DbUpdateException e)
         {
-            Console.WriteLine(e.Message);
+            return null;
         }
-        return null;
     }
 
     public async Task<IEnumerable<Customer>> GetCustomersAsync()

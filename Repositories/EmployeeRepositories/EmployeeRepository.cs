@@ -21,11 +21,10 @@ public class EmployeeRepository : IEmployeeRepository
             await _context.SaveChangesAsync();
             return employee;
         }
-        catch (Exception e)
+        catch (DbUpdateException e)
         {
-            Console.WriteLine(e.Message);
+            return null;
         }
-        return null;
     }
 
     public async Task<IEnumerable<Employee>> GetEmployeesAsync()

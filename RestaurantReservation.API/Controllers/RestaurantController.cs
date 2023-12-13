@@ -43,6 +43,10 @@ public class RestaurantController : Controller
         try
         {
             var addedRestaurant = await _restaurantService.AddRestaurantAsync(restaurantForCreationDto);
+            
+            if (addedRestaurant is null) 
+                return BadRequest("Unable to process your request due to data constraints");
+
             return CreatedAtRoute(
                 "FindRestaurant",
                 new

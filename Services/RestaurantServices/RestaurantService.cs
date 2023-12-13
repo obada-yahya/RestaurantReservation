@@ -27,8 +27,8 @@ public class RestaurantService: IRestaurantService
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            throw;
         }
-        return null;
     }
 
     public async Task<IEnumerable<RestaurantDto>> GetRestaurantsAsync()
