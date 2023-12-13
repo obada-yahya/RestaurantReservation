@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RestaurantReservation.Db;
-using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Profiles;
 using RestaurantReservation.Repositories.CustomerRepositories;
 using RestaurantReservation.Repositories.EmployeeRepositories;
 using RestaurantReservation.Repositories.RestaurantRepositories;
+using RestaurantReservation.Repositories.TableRepositories;
 using RestaurantReservation.Services.CustomerServices;
 using RestaurantReservation.Services.EmployeeServices;
 using RestaurantReservation.Services.RestaurantServices;
+using RestaurantReservation.Services.TableServices;
 
 namespace RestaurantReservation.Extensions;
 
@@ -18,10 +19,11 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddAutoMapper(typeof(RestaurantProfile));
         serviceCollection.AddAutoMapper(typeof(CustomerProfile));
         serviceCollection.AddAutoMapper(typeof(EmployeeProfile));
+        serviceCollection.AddAutoMapper(typeof(TableProfile));
         serviceCollection.AddTransient<IRestaurantService, RestaurantService>();
         serviceCollection.AddTransient<ICustomerService, CustomerService>();
         serviceCollection.AddTransient<IEmployeeService, EmployeeService>();
-
+        serviceCollection.AddTransient<ITableService, TableService>();
     }
 
     public static void AddDataAccessServices(this IServiceCollection serviceCollection)
@@ -30,6 +32,6 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddTransient<IRestaurantRepository, RestaurantRepository>();
         serviceCollection.AddTransient<ICustomerRepository, CustomerRepository>();
         serviceCollection.AddTransient<IEmployeeRepository, EmployeeRepository>();
-
+        serviceCollection.AddTransient<ITableRepository, TableRepository>();
     }
 }
