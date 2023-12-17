@@ -1,12 +1,13 @@
-﻿using RestaurantReservation.Db.RestaurantReservationDomain;
+﻿
+using RestaurantReservation.Dtos.MenuItemDtos;
 
 namespace RestaurantReservation.Services.MenuItemServices;
 
 public interface IMenuItemService
 {
-    public void AddMenuItem(MenuItem menuItem);
-    public IEnumerable<MenuItem> GetMenuItems();
-    public MenuItem? FindMenuItem(int id);
-    public void UpdateMenuItem(MenuItem menuItem);
-    public void DeleteMenuItem(int id);
+    public Task<MenuItemDto?> AddMenuItemAsync(MenuItemForCreationDto menuItem);
+    public Task<IEnumerable<MenuItemDto>> GetMenuItemsAsync();
+    public Task<MenuItemDto?> FindMenuItemAsync(int id);
+    public Task UpdateMenuItemAsync(MenuItemDto menuItem);
+    public Task DeleteMenuItemAsync(int id);
 }

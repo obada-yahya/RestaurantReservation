@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Dtos.EmployeeDtos;
 using RestaurantReservation.Repositories.EmployeeRepositories;
@@ -11,7 +10,7 @@ public class EmployeeService : IEmployeeService
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IMapper _mapper;
 
-    public EmployeeService(RestaurantReservationDbContext context, IMapper mapper, IEmployeeRepository employeeRepository)
+    public EmployeeService(IMapper mapper, IEmployeeRepository employeeRepository)
     {
         _mapper = mapper;
         _employeeRepository = employeeRepository;

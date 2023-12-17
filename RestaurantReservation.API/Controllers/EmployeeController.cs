@@ -45,7 +45,7 @@ public class EmployeeController : Controller
             var addedEmployee = await _employeeService.AddEmployeeAsync(employeeForCreationDto);
             
             if (addedEmployee is null) 
-                return BadRequest("Unable to process your request due to data constraints");
+                return BadRequest("Unable to process your request due to data constraints violation");
             
             return CreatedAtRoute(
                 "FindEmployee",

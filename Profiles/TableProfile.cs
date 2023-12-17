@@ -13,6 +13,6 @@ public class TableProfile : Profile
         CreateMap<Table, TableDto>();
         CreateMap<TableDto, Table>();
         CreateMap<TableForCreationDto, TableDto>();
-        CreateMap<RestaurantForUpdateDto, TableDto>();
+        CreateMap<TableForUpdateDto, TableDto>();
     }
 }

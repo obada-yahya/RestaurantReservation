@@ -46,7 +46,7 @@ public class TableController : Controller
             var addedTable = await _tableService.AddTableAsync(tableForCreationDto);
             
             if (addedTable is null) 
-                return BadRequest("Unable to process your request due to data constraints");
+                return BadRequest("Unable to process your request due to data constraints violation");
             
             return CreatedAtRoute(
                 "FindTable",
@@ -76,6 +76,11 @@ public class TableController : Controller
             _mapper.Map(tableForUpdateDto, tableDto);
             await _tableService.UpdateTableAsync(tableDto);
             return Ok($"The table with ID {tableId} has been successfully Updated.");
+        }
+        catch (InvalidDataException e)
+        {
+            _logger.LogCritical(e.Message);
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
