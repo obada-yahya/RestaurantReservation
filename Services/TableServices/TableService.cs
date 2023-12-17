@@ -1,49 +1,57 @@
-﻿using RestaurantReservation.Db;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.RestaurantReservationDomain;
-using RestaurantReservation.Services.Interfaces;
+using RestaurantReservation.Dtos.TableDtos;
+using RestaurantReservation.Repositories.TableRepositories;
 
 namespace RestaurantReservation.Services.TableServices;
 
 public class TableService: ITableService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly ITableRepository _tableRepository;
+    private readonly IMapper _mapper;
 
-    public TableService(RestaurantReservationDbContext context)
+    public TableService(ITableRepository tableRepository, IMapper mapper)
     {
-        _context = context;
+        _mapper = mapper;
+        _tableRepository = tableRepository;
     }
 
-    public void AddTable(Table table)
+    public async  Task<TableDto?> AddTableAsync(TableForCreationDto table)
     {
         try
         {
-            _context.Tables.Add(table);
-            _context.SaveChanges();
+            var tableModel = _mapper.Map<Table>(table);
+            tableModel = await _tableRepository.AddTableAsync(tableModel);
+            return _mapper.Map<TableDto>(tableModel);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+
+    public async Task<IEnumerable<TableDto>> GetTablesAsync()
+    {
+        try
+        {
+            return _mapper.Map<IEnumerable<TableDto>>
+                (await _tableRepository.GetTablesAsync());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-    }
-
-    public IEnumerable<Table> GetTables()
-    {
-        try
-        {
-            return _context.Tables;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-        return new List<Table>();
+        return new List<TableDto>();
     }
     
-    public Table? FindTable(int id)
+    public async Task<TableDto?> FindTableAsync(int id)
     {
         try
         {
-            return _context.Tables.Single(table => table.Id == id);
+            var tableModel = await _tableRepository.FindTableAsync(id);
+            return _mapper.Map<TableDto>(tableModel);
         }
         catch (Exception e)
         {
@@ -52,12 +60,16 @@ public class TableService: ITableService
         return null;
     }
     
-    public void UpdateTable(Table table)
+    public async Task UpdateTableAsync(TableDto table)
     {
         try
         {
-            _context.Tables.Update(table);
-            _context.SaveChanges();
+            var tableModel = _mapper.Map<Table>(table);
+            await _tableRepository.UpdateTableAsync(tableModel);
+        }
+        catch (DbUpdateException e)
+        {
+            throw new InvalidDataException("The Data Violates Database Constraints");
         }
         catch (Exception e)
         {
@@ -65,12 +77,11 @@ public class TableService: ITableService
         }
     }
     
-    public void DeleteTable(int id)
+    public async Task DeleteTableAsync(int id)
     {
         try
         {
-            _context.Tables.Remove(new Table(){Id = id});
-            _context.SaveChanges();
+            await _tableRepository.DeleteTableAsync(id);
         }
         catch (Exception e)
         {

@@ -1,12 +1,12 @@
-﻿using RestaurantReservation.Db.RestaurantReservationDomain;
+﻿using RestaurantReservation.Dtos.EmployeeDtos;
 
 namespace RestaurantReservation.Services.EmployeeServices;
 
 public interface IEmployeeService
 {
-    public void AddEmployee(Employee employee);
-    public IEnumerable<Employee> GetEmployees();
-    public Employee? FindEmployee(int id);
-    public void UpdateEmployee(Employee employee);
-    public void DeleteEmployee(int id);
+    public Task<EmployeeDto?> AddEmployeeAsync(EmployeeForCreationDto employee);
+    public Task<IEnumerable<EmployeeDto>> GetEmployeesAsync();
+    public Task<EmployeeDto?> FindEmployeeAsync(int id);
+    public Task UpdateEmployeeAsync(EmployeeDto employee);
+    public Task DeleteEmployeeAsync(int id);
 }

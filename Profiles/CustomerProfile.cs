@@ -10,6 +10,8 @@ public class CustomerProfile: Profile
     {
         CreateMap<CustomerForCreationDto, Customer>();
         CreateMap<Customer, CustomerDto>();
+        CreateMap<CustomerDto, Customer>();
         CreateMap<CustomerForCreationDto, CustomerDto>();
+        CreateMap<CustomerForUpdateDto, CustomerDto>();
     }
 }

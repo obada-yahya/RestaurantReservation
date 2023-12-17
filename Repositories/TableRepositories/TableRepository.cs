@@ -2,24 +2,24 @@
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 
-namespace RestaurantReservation.Repositories.CustomerRepositories;
+namespace RestaurantReservation.Repositories.TableRepositories;
 
-public class CustomerRepository : ICustomerRepository
+public class TableRepository: ITableRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
-    public CustomerRepository(RestaurantReservationDbContext context)
+    public TableRepository(RestaurantReservationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Customer?> AddCustomerAsync(Customer customer)
+    public async Task<Table?> AddTableAsync(Table table)
     {
         try
         {
-            await _context.Customers.AddAsync(customer);
+            await _context.Tables.AddAsync(table);
             await _context.SaveChangesAsync();
-            return customer;
+            return table;
         }
         catch (DbUpdateException e)
         {
@@ -27,12 +27,12 @@ public class CustomerRepository : ICustomerRepository
         }
     }
 
-    public async Task<IEnumerable<Customer>> GetCustomersAsync()
+    public async Task<IEnumerable<Table>> GetTablesAsync()
     {
         try
         {
             return await _context
-                .Customers
+                .Tables
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -40,17 +40,17 @@ public class CustomerRepository : ICustomerRepository
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Customer>();
+        return new List<Table>();
     }
 
-    public async Task<Customer?> FindCustomerAsync(int id)
+    public async Task<Table?> FindTableAsync(int id)
     {
         try
         {
             return await _context
-                .Customers
+                .Tables
                 .AsNoTracking()
-                .SingleAsync(customer => customer.Id == id);
+                .SingleAsync(table => table.Id == id);
         }
         catch (Exception e)
         {
@@ -59,15 +59,15 @@ public class CustomerRepository : ICustomerRepository
         return null;
     }
 
-    public async Task UpdateCustomerAsync(Customer customer)
+    public async Task UpdateTableAsync(Table table)
     {
-        _context.Customers.Update(customer);
+        _context.Tables.Update(table);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteCustomerAsync(int id)
+    public async Task DeleteTableAsync(int id)
     {
-        _context.Customers.Remove(new Customer(){Id = id});
+        _context.Tables.Remove(new Table() { Id = id });
         await _context.SaveChangesAsync();
     }
 }

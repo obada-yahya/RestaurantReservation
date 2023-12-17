@@ -1,6 +1,6 @@
 ﻿namespace RestaurantReservation.Dtos.CustomerDtos;
 
-public class CustomerForCreationDto
+public class CustomerForUpdateDto
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

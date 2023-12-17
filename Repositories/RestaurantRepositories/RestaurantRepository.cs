@@ -21,11 +21,10 @@ public class RestaurantRepository : IRestaurantRepository
             await _context.SaveChangesAsync();
             return restaurant;
         }
-        catch (Exception e)
+        catch (DbUpdateException e)
         {
-            Console.WriteLine(e.Message);
+            return null;
         }
-        return null;
     }
 
     public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync()

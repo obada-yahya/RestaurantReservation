@@ -1,51 +1,57 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Db;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Dtos.EmployeeDtos;
+using RestaurantReservation.Repositories.EmployeeRepositories;
 
 namespace RestaurantReservation.Services.EmployeeServices;
 
 public class EmployeeService : IEmployeeService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IMapper _mapper;
 
-    public EmployeeService(RestaurantReservationDbContext context)
+    public EmployeeService(IMapper mapper, IEmployeeRepository employeeRepository)
     {
-        _context = context;
+        _mapper = mapper;
+        _employeeRepository = employeeRepository;
     }
 
-    public void AddEmployee(Employee employee)
+    public async Task<EmployeeDto?> AddEmployeeAsync(EmployeeForCreationDto employee)
     {
         try
         {
-            _context.Employees.Add(employee);
-            _context.SaveChanges();
+            var employeeModel = _mapper.Map<Employee>(employee);
+            employeeModel = await _employeeRepository.AddEmployeeAsync(employeeModel);
+            return _mapper.Map<EmployeeDto>(employeeModel);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+
+    public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync()
+    {
+        try
+        {
+            return _mapper.Map<IEnumerable<EmployeeDto>>
+                (await _employeeRepository.GetEmployeesAsync());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
-    }
-
-    public IEnumerable<Employee> GetEmployees()
-    {
-        try
-        {
-            return _context.Employees.Include(employee => employee.OrdersServed);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-        return new List<Employee>();
+        return new List<EmployeeDto>();
     }
     
-    public Employee? FindEmployee(int id)
+    public async Task<EmployeeDto?> FindEmployeeAsync(int id)
     {
         try
         {
-            return _context.Employees
-                   .Include(employee => employee.OrdersServed)
-                   .Single(employee => employee.Id == id);
+            var employeeModel = await _employeeRepository.FindEmployeeAsync(id);
+            return _mapper.Map<EmployeeDto>(employeeModel);
         }
         catch (Exception e)
         {
@@ -53,13 +59,17 @@ public class EmployeeService : IEmployeeService
         }
         return null;
     }
-    
-    public void UpdateEmployee(Employee employee)
+
+    public async Task UpdateEmployeeAsync(EmployeeDto employee)
     {
         try
         {
-            _context.Employees.Update(employee);
-            _context.SaveChanges();
+            var employeeModel = _mapper.Map<Employee>(employee);
+            await _employeeRepository.UpdateEmployeeAsync(employeeModel);
+        }
+        catch (DbUpdateException e)
+        {
+            throw new InvalidDataException("The Data Violates Database Constraints");
         }
         catch (Exception e)
         {
@@ -67,12 +77,11 @@ public class EmployeeService : IEmployeeService
         }
     }
     
-    public void DeleteEmployee(int id)
+    public async Task DeleteEmployeeAsync(int id)
     {
         try
         {
-            _context.Employees.Remove(new Employee(){Id = id});
-            _context.SaveChanges();
+            await _employeeRepository.DeleteEmployeeAsync(id);
         }
         catch (Exception e)
         {
