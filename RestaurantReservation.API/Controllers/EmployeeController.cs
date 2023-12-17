@@ -76,6 +76,11 @@ public class EmployeeController : Controller
             await _employeeService.UpdateEmployeeAsync(employeeDto);
             return Ok($"The employee with ID {employeeId} has been successfully Updated.");
         }
+        catch (InvalidDataException e)
+        {
+            _logger.LogCritical(e.Message);
+            return BadRequest(e.Message);
+        }
         catch (Exception e)
         {
             _logger.LogError(e.Message);

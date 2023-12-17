@@ -69,7 +69,6 @@ public class MenuItemService : IMenuItemService
         }
         catch (DbUpdateException e)
         {
-            Console.WriteLine($"JJJKJKJ : {e.InnerException}");
             throw new InvalidDataException("The Data Violates Database Constraints");
         }
         catch (Exception e)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Dtos.RestaurantDtos;
 using RestaurantReservation.Repositories.RestaurantRepositories;
@@ -65,6 +66,10 @@ public class RestaurantService: IRestaurantService
         {
             var restaurantModel = _mapper.Map<Restaurant>(restaurant);
             await _restaurantRepository.UpdateRestaurantAsync(restaurantModel);
+        }
+        catch (DbUpdateException e)
+        {
+            throw new InvalidDataException("The Data Violates Database Constraints");
         }
         catch (Exception e)
         {

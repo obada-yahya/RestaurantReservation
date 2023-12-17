@@ -76,6 +76,11 @@ public class RestaurantController : Controller
             await _restaurantService.UpdateRestaurantAsync(restaurantDto);
             return Ok($"The restaurant with ID {restaurantId} has been successfully Updated.");
         }
+        catch (InvalidDataException e)
+        {
+            _logger.LogCritical(e.Message);
+            return BadRequest(e.Message);
+        }
         catch (Exception e)
         {
             _logger.LogError(e.Message);

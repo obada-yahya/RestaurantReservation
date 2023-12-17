@@ -67,7 +67,7 @@ public class TableService: ITableService
             var tableModel = _mapper.Map<Table>(table);
             await _tableRepository.UpdateTableAsync(tableModel);
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException e)
         {
             throw new InvalidDataException("The Data Violates Database Constraints");
         }

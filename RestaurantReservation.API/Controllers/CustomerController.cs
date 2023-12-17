@@ -76,6 +76,11 @@ public class CustomerController : Controller
             await _customerService.UpdateCustomerAsync(customerDto);
             return Ok($"The customer with ID {customerId} has been successfully Updated.");
         }
+        catch (InvalidDataException e)
+        {
+            _logger.LogCritical(e.Message);
+            return BadRequest(e.Message);
+        }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
