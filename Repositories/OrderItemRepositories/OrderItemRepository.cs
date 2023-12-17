@@ -34,6 +34,8 @@ public class OrderItemRepository : IOrderItemRepository
             return await _context
                 .OrderItems
                 .AsNoTracking()
+                .Include(orderItem
+                    => orderItem.MenuItem)
                 .ToListAsync();
         }
         catch (Exception e)
@@ -50,6 +52,8 @@ public class OrderItemRepository : IOrderItemRepository
             return await _context
                 .OrderItems
                 .AsNoTracking()
+                .Include(orderItem
+                    => orderItem.MenuItem)
                 .SingleAsync(order => order.Id == id);
         }
         catch (Exception e)
