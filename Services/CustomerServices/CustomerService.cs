@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 using RestaurantReservation.Dtos.CustomerDtos;
 using RestaurantReservation.Repositories.CustomerRepositories;
@@ -27,8 +28,8 @@ public class CustomerService : ICustomerService
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            throw;
         }
-        return null;
     }
 
     public async Task<IEnumerable<CustomerDto>> GetCustomersAsync()
@@ -65,6 +66,10 @@ public class CustomerService : ICustomerService
         {
             var customerModel = _mapper.Map<Customer>(customer);
             await _customerRepository.UpdateCustomerAsync(customerModel);
+        }
+        catch (DbUpdateException e)
+        {
+            throw new InvalidDataException("The Data Violates Database Constraints");
         }
         catch (Exception e)
         {

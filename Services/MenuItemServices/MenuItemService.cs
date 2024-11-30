@@ -1,49 +1,57 @@
-﻿using RestaurantReservation.Db;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.RestaurantReservationDomain;
+using RestaurantReservation.Dtos.MenuItemDtos;
+using RestaurantReservation.Repositories.MenuItemRepositories;
 
 namespace RestaurantReservation.Services.MenuItemServices;
 
 public class MenuItemService : IMenuItemService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly IMenuItemRepository _menuItemRepository;
+    private readonly IMapper _mapper;
 
-    public MenuItemService(RestaurantReservationDbContext context)
+    public MenuItemService(IMenuItemRepository menuItemRepository, IMapper mapper)
     {
-        _context = context;
+        _menuItemRepository = menuItemRepository;
+        _mapper = mapper;
     }
 
-    public void AddMenuItem(MenuItem menuItem)
+    public async Task<MenuItemDto?> AddMenuItemAsync(MenuItemForCreationDto menuItem)
     {
         try
         {
-            _context.MenuItems.Add(menuItem);
-            _context.SaveChanges();
+            var menuItemModel = _mapper.Map<MenuItem>(menuItem);
+            menuItemModel = await _menuItemRepository.AddMenuItemAsync(menuItemModel);
+            return _mapper.Map<MenuItemDto>(menuItemModel);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+
+    public async Task<IEnumerable<MenuItemDto>> GetMenuItemsAsync()
+    {
+        try
+        {
+            return _mapper.Map<IEnumerable<MenuItemDto>>
+                (await _menuItemRepository.GetMenuItemsAsync());
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
+        return new List<MenuItemDto>();
     }
 
-    public IEnumerable<MenuItem> GetMenuItems()
+    public async Task<MenuItemDto?> FindMenuItemAsync(int id)
     {
         try
         {
-            return _context.MenuItems;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-        return new List<MenuItem>();
-    }
-    
-    public MenuItem? FindMenuItem(int id)
-    {
-        try
-        {
-            return _context.MenuItems
-                   .Single(order => order.Id == id);
+            var menuItemModel = await _menuItemRepository.FindMenuItemAsync(id);
+            return _mapper.Map<MenuItemDto>(menuItemModel);
         }
         catch (Exception e)
         {
@@ -51,26 +59,29 @@ public class MenuItemService : IMenuItemService
         }
         return null;
     }
-    
-    public void UpdateMenuItem(MenuItem menuItem)
+
+    public async Task UpdateMenuItemAsync(MenuItemDto menuItem)
     {
         try
         {
-            _context.MenuItems.Update(menuItem);
-            _context.SaveChanges();
+            var menuItemModel = _mapper.Map<MenuItem>(menuItem);
+            await _menuItemRepository.UpdateMenuItemAsync(menuItemModel);
+        }
+        catch (DbUpdateException e)
+        {
+            throw new InvalidDataException("The Data Violates Database Constraints");
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
     }
-    
-    public void DeleteMenuItem(int id)
+
+    public async Task DeleteMenuItemAsync(int id)
     {
         try
         {
-            _context.MenuItems.Remove(new MenuItem(){Id = id});
-            _context.SaveChanges();
+            await _menuItemRepository.DeleteMenuItemAsync(id);
         }
         catch (Exception e)
         {

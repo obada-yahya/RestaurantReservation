@@ -2,24 +2,24 @@
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.RestaurantReservationDomain;
 
-namespace RestaurantReservation.Repositories.CustomerRepositories;
+namespace RestaurantReservation.Repositories.MenuItemRepositories;
 
-public class CustomerRepository : ICustomerRepository
+public class MenuItemRepository : IMenuItemRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
-    public CustomerRepository(RestaurantReservationDbContext context)
+    public MenuItemRepository(RestaurantReservationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Customer?> AddCustomerAsync(Customer customer)
+    public async Task<MenuItem?> AddMenuItemAsync(MenuItem menuItem)
     {
         try
         {
-            await _context.Customers.AddAsync(customer);
+            await _context.MenuItems.AddAsync(menuItem);
             await _context.SaveChangesAsync();
-            return customer;
+            return menuItem;
         }
         catch (DbUpdateException e)
         {
@@ -27,12 +27,12 @@ public class CustomerRepository : ICustomerRepository
         }
     }
 
-    public async Task<IEnumerable<Customer>> GetCustomersAsync()
+    public async Task<IEnumerable<MenuItem>> GetMenuItemsAsync()
     {
         try
         {
             return await _context
-                .Customers
+                .MenuItems
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -40,17 +40,17 @@ public class CustomerRepository : ICustomerRepository
         {
             Console.WriteLine(e.Message);
         }
-        return new List<Customer>();
+        return new List<MenuItem>();
     }
 
-    public async Task<Customer?> FindCustomerAsync(int id)
+    public async Task<MenuItem?> FindMenuItemAsync(int id)
     {
         try
         {
             return await _context
-                .Customers
+                .MenuItems
                 .AsNoTracking()
-                .SingleAsync(customer => customer.Id == id);
+                .SingleAsync(menuItem => menuItem.Id == id);
         }
         catch (Exception e)
         {
@@ -59,15 +59,15 @@ public class CustomerRepository : ICustomerRepository
         return null;
     }
 
-    public async Task UpdateCustomerAsync(Customer customer)
+    public async Task UpdateMenuItemAsync(MenuItem menuItem)
     {
-        _context.Customers.Update(customer);
+        _context.MenuItems.Update(menuItem);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteCustomerAsync(int id)
+    public async Task DeleteMenuItemAsync(int id)
     {
-        _context.Customers.Remove(new Customer(){Id = id});
+        _context.MenuItems.Remove(new MenuItem(){Id = id});
         await _context.SaveChangesAsync();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantReservation.Dtos;
 using RestaurantReservation.Dtos.RestaurantDtos;
 using RestaurantReservation.Services.RestaurantServices;
 
@@ -21,14 +20,14 @@ public class RestaurantController : Controller
         _mapper = mapper;
     }
     
-    [HttpGet("/Restaurants")]
-    public async Task<IActionResult> GetRestaurants()
+    [HttpGet]
+    public async Task<IActionResult> GetRestaurantsAsync()
     {
         return Ok(await _restaurantService.GetRestaurantsAsync());
     }
 
-    [HttpGet("/Restaurants/{restaurantId:int}", Name = "FindRestaurant")]
-    public async Task<IActionResult> FindRestaurant(int restaurantId)
+    [HttpGet("{restaurantId:int}", Name = "FindRestaurant")]
+    public async Task<IActionResult> FindRestaurantAsync(int restaurantId)
     {
         var restaurant = await _restaurantService.FindRestaurantAsync(restaurantId);
         if (restaurant is null)
@@ -38,19 +37,23 @@ public class RestaurantController : Controller
         return Ok(restaurant);
     }
 
-    [HttpPost("/Restaurants")]
-    public async Task<IActionResult> AddRestaurant(RestaurantForCreationDto restaurantForCreationDto)
+    [HttpPost]
+    public async Task<IActionResult> AddRestaurantAsync(RestaurantForCreationDto restaurantForCreationDto)
     {
         try
         {
-            var addRestaurant = await _restaurantService.AddRestaurantAsync(restaurantForCreationDto);
+            var addedRestaurant = await _restaurantService.AddRestaurantAsync(restaurantForCreationDto);
+            
+            if (addedRestaurant is null) 
+                return BadRequest("Unable to process your request due to data constraints violation");
+
             return CreatedAtRoute(
                 "FindRestaurant",
                 new
                 {
-                    restaurantId = addRestaurant.Id
+                    restaurantId = addedRestaurant.Id
                 },
-                addRestaurant);
+                addedRestaurant);
         }
         catch (Exception e)
         {
@@ -59,19 +62,24 @@ public class RestaurantController : Controller
         return StatusCode(StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPut("/Restaurants/{restaurantId:int}")]
-    public async Task<IActionResult> UpdateRestaurant(int restaurantId,RestaurantForUpdateDto restaurantForUpdateDto)
+    [HttpPut("{restaurantId:int}")]
+    public async Task<IActionResult> UpdateRestaurantAsync(int restaurantId,RestaurantForUpdateDto restaurantForUpdateDto)
     {
         try
         {
-            var restaurant = await _restaurantService.FindRestaurantAsync(restaurantId);
-            if (restaurant is null)
+            var restaurantDto = await _restaurantService.FindRestaurantAsync(restaurantId);
+            if (restaurantDto is null)
             {
                 return NotFound();
             }
-            _mapper.Map(restaurantForUpdateDto, restaurant);
-            await _restaurantService.UpdateRestaurantAsync(restaurant);
+            _mapper.Map(restaurantForUpdateDto, restaurantDto);
+            await _restaurantService.UpdateRestaurantAsync(restaurantDto);
             return Ok($"The restaurant with ID {restaurantId} has been successfully Updated.");
+        }
+        catch (InvalidDataException e)
+        {
+            _logger.LogCritical(e.Message);
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
@@ -80,8 +88,8 @@ public class RestaurantController : Controller
         return StatusCode(StatusCodes.Status500InternalServerError);
     }
     
-    [HttpDelete("/Restaurants/{restaurantId:int}")]
-    public async Task<IActionResult> DeleteRestaurant(int restaurantId)
+    [HttpDelete("{restaurantId:int}")]
+    public async Task<IActionResult> DeleteRestaurantAsync(int restaurantId)
     {
         try
         {
